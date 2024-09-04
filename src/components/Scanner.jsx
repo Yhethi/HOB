@@ -1,63 +1,49 @@
-import React, { useEffect, useState } from "react";
-import * as Quagga from "quagga";
+import React, { useState, useRef } from "react";
+import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
 
 export const Scanner = () => {
-  const [codeScanned, setCodeScanned] = useState(0);
+  const [codeScanned, setCodeScanned] = useState("");
+  const videoRef = useRef(null);
+  const [isScanning, setIsScanning] = useState(false);
 
   const initScan = () => {
-    Quagga.init(
-      {
-        inputStream: {
-          name: "Live",
-          type: "LiveStream",
-          target: document.querySelector("#reader"), // Or '#yourElement' (optional)
-        },
-        decoder: {
-          readers: [
-            "ean_reader",
-            "ean_reader",
-            "ean_8_reader",
-            "code_39_reader",
-            "code_39_vin_reader",
-            "codabar_reader",
-            "upc_reader",
-            "upc_e_reader",
-            "i2of5_reader",
-            "2of5_reader",
-            "code_93_reader",
-          ],
-        },
-      },
-      function (err) {
-        if (err) {
-          console.log(err);
-          return;
-        }
-        console.log("Initialization finished. Ready to start");
-        Quagga.start();
-        Quagga.onDetected((data) => {
-          showCode(data);
-        });
-      }
-    );
-  };
+    if (isScanning) return;
 
-  const showCode = (code) => {
-    console.log("Este es el codigo: ", code);
-    setCodeScanned(data);
+    const codeReader = new BrowserMultiFormatReader();
+
+    try {
+      codeReader.decodeFromVideoDevice(null, videoRef.current, (result, err) => {
+        if (result) {
+          const code = result.getText();
+          console.log("Código detectado: ", code);
+          setCodeScanned(code);
+          // codeReader.reset(); // Detenemos el escáner después de detectar un código
+          // setIsScanning(false);
+        }
+        if (err && !(err instanceof NotFoundException)) {
+          console.error(err);
+        }
+      });
+
+      setIsScanning(true);
+    } catch (error) {
+      console.error("Error al iniciar el escaneo: ", error);
+      setIsScanning(false);
+    }
   };
 
   return (
     <div>
-      <h1>Scanner - {codeScanned}</h1>
-      <button
-        onClick={() => {
-          initScan();
-        }}
-      >
-        Activar Camara
+      <h1>Scanner - Código Detectado: {codeScanned}</h1>
+      <button onClick={initScan} disabled={isScanning}>
+        {isScanning ? "Escaneando..." : "Activar Cámara"}
       </button>
-      <div id="reader"></div>
+      <video
+        ref={videoRef}
+        style={{ width: "100%", height: "400px", border: "1px solid black" }}
+      ></video>
     </div>
   );
 };
+
+export default Scanner;
