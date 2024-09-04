@@ -10,12 +10,4 @@ export default defineConfig({
       "/api": "http://localhost:3001",
     },
   },
-  resolve: {
-    alias: {
-      "@ericblade/quagga2": path.resolve(
-        __dirname,
-        "node_modules/@ericblade/quagga2/src/quagga.js"
-      ),
-    },
-  },
 });

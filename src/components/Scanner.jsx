@@ -12,33 +12,18 @@ export const Scanner = () => {
     const codeReader = new BrowserMultiFormatReader();
 
     try {
-      codeReader.decodeFromVideoDevice(
-        null,
-        videoRef.current,
-        (result, err) => {
-          if (result) {
-            const code = result.getText();
-            console.log("Código detectado: ", code);
-            setCodeScanned(code);
-            codeReader.reset();
-            setIsScanning(false);
-          }
-          if (err && !(err instanceof NotFoundException)) {
-            console.error(err);
-          }
+      codeReader.decodeFromVideoDevice(null, videoRef.current, (result, err) => {
+        if (result) {
+          const code = result.getText();
+          console.log("Código detectado: ", code);
+          setCodeScanned(code);
+          // codeReader.reset(); // Detenemos el escáner después de detectar un código
+          // setIsScanning(false);
         }
-      );
-
-      // Adjust the resolution here
-      if (videoRef.current) {
-        const stream = videoRef.current.srcObject;
-        const tracks = stream.getVideoTracks();
-        tracks[0].applyConstraints({
-          width: { ideal: 640 },
-          height: { ideal: 480 },
-          facingMode: "environment", // Use the back camera on mobile devices
-        });
-      }
+        if (err && !(err instanceof NotFoundException)) {
+          console.error(err);
+        }
+      });
 
       setIsScanning(true);
     } catch (error) {
