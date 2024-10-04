@@ -1,19 +1,25 @@
 import React, { useEffect, useState } from "react";
-import "./App.css";
+import "./assets/styles/App.scss";
 import axios from "axios";
 import { Scanner } from "./components/Scanner";
+import { Header } from "./components/Header";
+import { Products } from "./components/Products";
+import { BackgroundAnimated } from "./components/BackgroundAnimated";
+import { useDispatch, useSelector } from "react-redux";
+import { addUser } from "./redux/slices/userSlice";
+import { setProducts } from "./redux/slices/productsSlice";
 
 function App() {
   const [codigo_barras, setCodigo_barras] = useState("0");
   const [nombre, setNombre] = useState("Producto");
   const [descripcion, setDescripcion] = useState("D");
   const [productos, setProductos] = useState([]);
-
+  const dispatch = useDispatch();
   useEffect(() => {
-    // fetch("/api/productos")
-    //   .then((response) => response.json())
-    //   .then((data) => setProductos(data))
-    //   .catch((error) => console.error("Error fetching productos:", error));
+    fetch("/api/productos")
+      .then((response) => response.json())
+      .then((data) => dispatch(setProducts(data)))
+      .catch((error) => console.error("Error fetching productos:", error));
   }, []);
 
   const handleSubmit = (e) => {
@@ -49,8 +55,11 @@ function App() {
   };
 
   return (
-    <div className="global__Container">
-      <Scanner />
+    <div className="global__container">
+      <BackgroundAnimated />
+      <Header />
+      <Products />
+      {/* <Scanner /> */}
       {/* <h1>Productos</h1>
       <ul>
         {productos.map((producto) => (

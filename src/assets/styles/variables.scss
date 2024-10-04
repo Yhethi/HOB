@@ -1,0 +1,13 @@
+:root {
+  // Dark
+  --primary-color: #242424;
+  --text-dark-mode: white;
+  --bg-card-product: #000000a4;
+  // Light
+  --bg-card-product-light: #ffffffa4;
+}
+
+$primary-color: var(--primary-color);
+$text-dark-mode: var(--text-dark-mode);
+
+$bg-card-product: var(--bg-card-product);

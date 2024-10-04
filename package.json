@@ -5,20 +5,31 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "start": "node src/api/connection.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^6.1.1",
+    "@mui/material": "^6.1.1",
+    "@mui/styled-engine-sc": "^6.1.1",
+    "@reduxjs/toolkit": "^2.2.7",
     "@zxing/library": "^0.21.3",
     "axios": "^1.7.5",
+    "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "morgan": "^1.10.0",
     "mysql2": "^3.11.0",
     "nodemon": "^3.1.4",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-redux": "^9.1.2",
+    "sass-embedded": "^1.79.4",
+    "styled-components": "^6.1.13"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

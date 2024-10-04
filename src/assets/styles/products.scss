@@ -1,0 +1,116 @@
+@import "./variables.scss";
+
+.boxProduct {
+  padding-top: 10px;
+}
+
+.card__product {
+  height: auto;
+  background: $bg-card-product !important;
+  padding: 2px !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  cursor: pointer;
+  &:hover {
+    .card__product__data {
+      .card_product_description p {
+        color: #808185;
+        text-decoration: underline;
+      }
+    }
+  }
+  .card__product__internal {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    height: 100%;
+    overflow: hidden;
+    .card_image {
+      // background: #ffffff;
+    }
+    img {
+      // padding-top: 20px;
+      width: 100%;
+      height: 227px;
+      object-fit: cover;
+      /* the coordinate of the zoom */
+      --x: 50%;
+      --y: 50%;
+      /**/
+      transform: scale(var(--zoom));
+      transform-origin: var(--x) var(--y);
+      clip-path: inset(
+        calc((1 - 1 / var(--zoom)) * (var(--y)))
+          calc((1 - 1 / var(--zoom)) * (100% - var(--x)))
+          calc((1 - 1 / var(--zoom)) * (100% - var(--y)))
+          calc((1 - 1 / var(--zoom)) * (var(--x)))
+      );
+      cursor: crosshair;
+    }
+    img:hover {
+      --zoom: 2; /* control the zoom level */
+    }
+    .card__product__data {
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0px;
+      padding: 5px;
+      .card__product__header h2 {
+        font-size: 1.1rem;
+        text-align: center;
+        color: $text-dark-mode;
+      }
+      .card_product_description p {
+        padding: 5px;
+        font-size: 0.92rem;
+        line-height: 18px;
+        text-align: justify;
+        height: 100px;
+        max-height: 100px;
+        overflow-y: auto; /* Aparecerá un scroll solo si es necesario */
+        scrollbar-gutter: stable; /* Previene el salto cuando aparece/desaparece el scroll */
+        color: #3366bb;
+      }
+      .card_product_codigo_barras p {
+        font-size: 0.8rem;
+        text-align: right;
+      }
+      .card_product_price p {
+        font-size: 1.5rem;
+        text-align: left;
+        font-weight: 700;
+        color: #b12704;
+      }
+      .card_product_description p::-webkit-scrollbar {
+        width: 4px; /* width of the entire scrollbar */
+      }
+
+      .card_product_description p::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0); /* color of the tracking area */
+      }
+
+      .card_product_description p::-webkit-scrollbar-thumb {
+        background-color: $primary-color; /* color of the scroll thumb */
+        border-radius: 20px; /* roundness of the scroll thumb */
+        border: 0px solid rgb(0, 0, 0); /* creates padding around scroll thumb */
+      }
+    }
+  }
+}
+@media only screen and (max-width: 900px) {
+  .card__product {
+    height: auto;
+    img {
+      width: 100% !important;
+      object-fit: contain !important;
+      height: auto !important;
+    }
+  }
+
+  //   .card__product__internal {
+  //     display: flex;
+  //     flex-direction: column;
+  //   }
+}
