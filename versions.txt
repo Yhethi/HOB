@@ -3,3 +3,6 @@
 
 1.01
 - version only dev
+
+1.011
+- Version with serch work with redux dev
