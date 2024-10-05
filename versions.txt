@@ -9,3 +9,6 @@
 
 1.02
 - Cart mechanic open integrated and icons
+
+1.021
+- Menu MObile version background primary fixed

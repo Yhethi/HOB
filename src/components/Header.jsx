@@ -135,7 +135,7 @@ export const Header = () => {
       onClose={handleMenuClose}
       sx={{
         "& .MuiPaper-root": {
-          backgroundColor: "primary.main", // Usando el color primario de tu tema
+          backgroundColor: "primary.main",
         },
       }}
     >
@@ -157,6 +157,11 @@ export const Header = () => {
       transformOrigin={{
         vertical: "top",
         horizontal: "right",
+      }}
+      sx={{
+        "& .MuiPaper-root": {
+          backgroundColor: "primary.main",
+        },
       }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
