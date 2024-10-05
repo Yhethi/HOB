@@ -1,0 +1,77 @@
+@import "./variables.scss";
+
+.cart__global {
+  position: fixed;
+  width: 400px;
+  height: 100vh;
+  background: $primary-color;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  padding: 10px;
+  transition-duration: 0.5s;
+  .cart__container__cards {
+    background: rgb(70, 70, 70);
+    height: 80%;
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
+    position: relative;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    .cart__card {
+      border-radius: 10px;
+      display: flex;
+      width: 100%;
+      min-height: 100px;
+      background: rgba(0, 0, 0, 0.644);
+      color: white;
+      padding: 10px;
+      gap: 5px;
+      img {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+      }
+    }
+  }
+
+  .cart__container__cards::-webkit-scrollbar {
+    width: 4px; /* width of the entire scrollbar */
+  }
+
+  .cart__container__cards::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0); /* color of the tracking area */
+  }
+
+  .cart__container__cards::-webkit-scrollbar-thumb {
+    background-color: $primary-color; /* color of the scroll thumb */
+    border-radius: 20px; /* roundness of the scroll thumb */
+    border: 0px solid rgb(0, 0, 0); /* creates padding around scroll thumb */
+  }
+
+  .cart__close {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    svg {
+      cursor: pointer;
+      height: 40px;
+      width: 40px;
+      transition: 0.1s;
+      color: $text-dark-mode;
+      &:hover {
+        scale: 1.2;
+      }
+    }
+  }
+}
+@media only screen and (max-width: 400px) {
+  .cart__global {
+    width: 100% !important;
+  }
+}

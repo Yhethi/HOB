@@ -45,7 +45,7 @@ export const Products = () => {
         <Grid
           container
           spacing={{ xs: 2, md: 2, md: 1.5 }}
-          columns={{ xs: 4, sm: 24, md: 60 }}
+          columns={{ xs: 4, sm: 24, md: 72 }}
         >
           {allProducts.map((product, index) => (
             <Grid key={index} size={{ xs: 2, sm: 8, md: 12 }}>

@@ -1,19 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  codigo_barras: "",
-  descripcion: "",
-  id: 0,
-  imagen_url:
-    "https://orientalgeneralstores.co.ke/wp-content/uploads/2022/12/test-product.jpg",
-  nombre: "",
-  usuario_id: 0,
+  products: {
+    codigo_barras: "",
+    descripcion: "",
+    id: 0,
+    imagen_url:
+      "https://orientalgeneralstores.co.ke/wp-content/uploads/2022/12/test-product.jpg",
+    nombre: "",
+    usuario_id: 0,
+  },
+  visible: false,
 };
 
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
+    setShowCart: (state, action) => {
+      state.visible = action.payload;
+    },
     addCartItem: (state, action) => {
       const { id, codigo_barras, descripcion, imagen_url, nombre, usuario_id } =
         action.payload;
@@ -30,5 +36,5 @@ export const cartSlice = createSlice({
   },
 });
 
-export const { addCartItem } = cartSlice.actions;
+export const { addCartItem, setShowCart } = cartSlice.actions;
 export default cartSlice.reducer;

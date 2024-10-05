@@ -6,3 +6,6 @@
 
 1.011
 - Version with serch work with redux dev
+
+1.02
+- Cart mechanic open integrated and icons

@@ -22,10 +22,14 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import "../assets/styles/Header.scss";
 import { useState } from "react";
+// Icons
 import DarkModeIcon from "@mui/icons-material/DarkMode";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+
 import { getProductFilter } from "../redux/slices/productsSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getDarkMode } from "../js/changeColor";
+import { setShowCart } from "../redux/slices/cartSlice";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -70,13 +74,27 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const [isPrimaryColor, setIsPrimaryColor] = useState(true);
-  const [searchText, setSearchText] = useState("");
+  // const [showCart, setShowCart] = useState(false);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const [isDarkMode, setIsDarkMode] = useState(true); // Empieza en modo oscuro
   // Redux
   const dispatch = useDispatch();
+
+  const togglePrimaryColor = () => {
+    getDarkMode(isDarkMode);
+    setIsDarkMode(!isDarkMode); // Cambia entre los temas claro y oscuro
+  };
+  useEffect(() => {
+    togglePrimaryColor();
+    dispatch(setShowCart(false));
+  }, []);
+
+  const showCart = useSelector((state) => state.cart.visible);
+  const toggleShowCart = () => {
+    dispatch(setShowCart(!showCart));
+  };
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -115,6 +133,11 @@ export const Header = () => {
       }}
       open={isMenuOpen}
       onClose={handleMenuClose}
+      sx={{
+        "& .MuiPaper-root": {
+          backgroundColor: "primary.main", // Usando el color primario de tu tema
+        },
+      }}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
@@ -146,6 +169,14 @@ export const Header = () => {
         </IconButton>
         <p>Messages</p>
       </MenuItem>
+      <MenuItem onClick={togglePrimaryColor}>
+        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+          <Badge badgeContent={isDarkMode ? "on" : "off"} color="error">
+            <DarkModeIcon />
+          </Badge>
+        </IconButton>
+        <p>Modo Oscuro</p>
+      </MenuItem>
       <MenuItem>
         <IconButton
           size="large"
@@ -172,14 +203,6 @@ export const Header = () => {
       </MenuItem>
     </Menu>
   );
-  const [isDarkMode, setIsDarkMode] = useState(true); // Empieza en modo oscuro
-  const togglePrimaryColor = () => {
-    getDarkMode(isDarkMode);
-    setIsDarkMode(!isDarkMode); // Cambia entre los temas claro y oscuro
-  };
-  useEffect(() => {
-    togglePrimaryColor();
-  }, []);
 
   // Tema claro
   const lightTheme = createTheme({
@@ -271,6 +294,16 @@ export const Header = () => {
                 </IconButton>
                 <IconButton
                   size="large"
+                  aria-label="show 4 new mails"
+                  color="inherit"
+                  onClick={toggleShowCart}
+                >
+                  <Badge badgeContent={showCart ? "on" : "off"} color="error">
+                    <ShoppingCartIcon />
+                  </Badge>
+                </IconButton>
+                <IconButton
+                  size="large"
                   edge="end"
                   aria-label="account of current user"
                   aria-controls={menuId}
@@ -282,6 +315,16 @@ export const Header = () => {
                 </IconButton>
               </Box>
               <Box sx={{ display: { xs: "flex", md: "none" } }}>
+                <IconButton
+                  size="large"
+                  aria-label="show 4 new mails"
+                  color="inherit"
+                  onClick={toggleShowCart}
+                >
+                  <Badge badgeContent={showCart ? "on" : "off"} color="error">
+                    <ShoppingCartIcon />
+                  </Badge>
+                </IconButton>
                 <IconButton
                   size="large"
                   aria-label="show more"
