@@ -15,3 +15,6 @@
 
 1.03
 - Cart styled added, and logic with products and animations etc. Is a big updated
+
+1.031
+- Added Page Not Found and React Router

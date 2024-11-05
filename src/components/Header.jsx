@@ -31,6 +31,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDarkMode } from "../js/changeColor";
 import { setShowCart } from "../redux/slices/cartSlice";
 import { toggleSidebar } from "../redux/slices/sidebarSlice";
+import { Sidebar } from "./Sidebar";
+import { useNavigate } from "react-router-dom";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -82,7 +84,7 @@ export const Header = () => {
   const isPulsing = useSelector((state) => state.cart.pulse);
   // Redux
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const togglePrimaryColor = () => {
     getDarkMode(isDarkMode);
     setIsDarkMode(!isDarkMode); // Cambia entre los temas claro y oscuro
@@ -123,6 +125,10 @@ export const Header = () => {
     dispatch(toggleSidebar(!getSidebarStatus));
   };
 
+  const handleGoTo = (url) => {
+    navigate(url);
+  };
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -145,8 +151,20 @@ export const Header = () => {
         },
       }}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem
+        onClick={() => {
+          handleGoTo("/perfil/1");
+        }}
+      >
+        Profile
+      </MenuItem>
+      <MenuItem
+        onClick={() => {
+          handleGoTo("/perfil/2");
+        }}
+      >
+        My account
+      </MenuItem>
     </Menu>
   );
 
@@ -241,6 +259,7 @@ export const Header = () => {
 
   return (
     <>
+      <Sidebar />
       <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
         <Box sx={{ flexGrow: 1 }}>
           <AppBar className="appBar" position="static">

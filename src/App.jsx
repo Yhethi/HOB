@@ -11,6 +11,7 @@ import { setProducts } from "./redux/slices/productsSlice";
 import { Cart } from "./components/Cart";
 import { testProducts } from "./test/listProducts";
 import { Sidebar } from "./components/Sidebar";
+import { UserProfile } from "./components/UserProfile";
 
 function App() {
   const [codigo_barras, setCodigo_barras] = useState("0");
@@ -64,7 +65,7 @@ function App() {
       <Header />
       <Products />
       <Cart />
-      <Sidebar />
+      
       {/* <Scanner /> */}
       {/* <h1>Productos</h1>
       <ul>

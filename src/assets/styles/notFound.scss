@@ -1,0 +1,117 @@
+@import "./variables.scss";
+
+.not-found {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: $text-dark-mode;
+  text-align: center;
+
+  .not-found__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeIn 1.5s ease-in-out;
+
+    .not-found__image {
+      max-width: 70%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1.5rem;
+      animation: floatImage 3s infinite ease-in-out;
+    }
+
+    .not-found__title {
+      font-size: 6rem;
+      font-weight: bold;
+      color: #ff6b6b;
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+      margin: 0;
+    }
+
+    .not-found__zero {
+      display: inline-block;
+      animation: bounce 1s infinite;
+      color: #ff4757;
+    }
+
+    .not-found__message {
+      font-size: 1.25rem;
+      margin: 1rem 0;
+      color: $text-dark-mode;
+      animation: slideIn 1.8s ease-in-out;
+    }
+
+    .not-found__button {
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      color: #fff;
+      background-color: #ff6b6b;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      animation: fadeInUp 2s ease-in-out;
+
+      &:hover {
+        background-color: #ff4757;
+      }
+    }
+  }
+
+  // Animations
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes floatImage {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-15px);
+    }
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(-50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}
