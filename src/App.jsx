@@ -10,6 +10,7 @@ import { addUser } from "./redux/slices/userSlice";
 import { setProducts } from "./redux/slices/productsSlice";
 import { Cart } from "./components/Cart";
 import { testProducts } from "./test/listProducts";
+import { Sidebar } from "./components/Sidebar";
 
 function App() {
   const [codigo_barras, setCodigo_barras] = useState("0");
@@ -22,9 +23,7 @@ function App() {
     //   .then((response) => response.json())
     //   .then((data) => dispatch(setProducts(data)))
     //   .catch((error) => console.error("Error fetching productos:", error));
-    dispatch(
-      setProducts(testProducts)
-    );
+    dispatch(setProducts(testProducts));
   }, []);
 
   const handleSubmit = (e) => {
@@ -65,6 +64,7 @@ function App() {
       <Header />
       <Products />
       <Cart />
+      <Sidebar />
       {/* <Scanner /> */}
       {/* <h1>Productos</h1>
       <ul>

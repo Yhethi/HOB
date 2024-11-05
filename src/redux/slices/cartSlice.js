@@ -1,16 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  products: {
-    codigo_barras: "",
-    descripcion: "",
-    id: 0,
-    imagen_url:
-      "https://orientalgeneralstores.co.ke/wp-content/uploads/2022/12/test-product.jpg",
-    nombre: "",
-    usuario_id: 0,
-  },
+  products: [],
   visible: false,
+  pulse: false,
 };
 
 export const cartSlice = createSlice({
@@ -20,21 +13,51 @@ export const cartSlice = createSlice({
     setShowCart: (state, action) => {
       state.visible = action.payload;
     },
+    setPulseCart: (state, action) => {
+      state.pulse = action.payload;
+    },
     addCartItem: (state, action) => {
-      const { id, codigo_barras, descripcion, imagen_url, nombre, usuario_id } =
-        action.payload;
-      state.push({
-        id: id,
-        usuario_id: usuario_id,
-        nombre: nombre,
-        descripcion: descripcion,
-        precio: precio,
-        imagen_url: imagen_url,
-        codigo_barras: codigo_barras,
-      });
+      const {
+        id,
+        codigo_barras,
+        descripcion,
+        precio,
+        imagen_url,
+        nombre,
+        usuario_id,
+        cantidad,
+      } = action.payload;
+
+      const existingProductIndex = state.products.findIndex(
+        (product) => product.id === id
+      );
+
+      if (existingProductIndex !== -1) {
+        state.products[existingProductIndex].cantidad += cantidad;
+      } else {
+        state.products.push({
+          id,
+          codigo_barras,
+          descripcion,
+          precio,
+          imagen_url,
+          nombre,
+          usuario_id,
+          cantidad,
+        });
+      }
+    },
+    deleteCartItem: (state, action) => {
+      const existingProductIndex = state.products.findIndex(
+        (product) => product.id === action.payload
+      );
+      if (existingProductIndex !== -1) {
+        state.products.splice(existingProductIndex, 1);
+      }
     },
   },
 });
 
-export const { addCartItem, setShowCart } = cartSlice.actions;
+export const { addCartItem, setShowCart, setPulseCart, deleteCartItem } =
+  cartSlice.actions;
 export default cartSlice.reducer;

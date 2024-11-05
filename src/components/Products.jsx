@@ -8,77 +8,41 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setZoomDynamic } from "../js/zoomImg";
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(2),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-  ...theme.applyStyles("dark", {
-    backgroundColor: "#1A2027",
-  }),
-}));
+import { addCartItem } from "../redux/slices/cartSlice";
+import { Product } from "./Product";
+import { AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import { useRef } from "react";
 
 export const Products = () => {
   // Redux
   const dispatch = useDispatch();
   const allProducts = useSelector((state) => state.products.products);
   // Redux
+  const boxProductContainer = useRef(null);
+  const showCart = useSelector((state) => state.cart.visible);
+
+  useEffect(() => {
+    if (boxProductContainer.current) {
+      boxProductContainer.current.style.paddingRight = showCart
+        ? "400px"
+        : "0px";
+    }
+  }, [showCart]);
 
   useEffect(() => {
     setZoomDynamic();
   }, [allProducts]);
-  console.log(allProducts);
 
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const handleImageClick = () => {
-    setIsFullscreen(!isFullscreen);
-  };
   return (
     <>
-      <Box
-        sx={{ flexGrow: 1 }}
-        style={{ background: "transparent", paddingInline: "10px" }}
-        className="boxProduct"
-      >
-        <Grid
-          container
-          spacing={{ xs: 2, md: 2, md: 1.5 }}
-          columns={{ xs: 4, sm: 24, md: 72 }}
-        >
+      <div className="boxProduct" ref={boxProductContainer}>
+        <AnimatePresence>
           {allProducts.map((product, index) => (
-            <Grid key={index} size={{ xs: 2, sm: 8, md: 12 }}>
-              <Item className="card__product">
-                <div className="card__product__internal">
-                  <div className="card_image">
-                    <img
-                      // src={product.imagen_url}
-                      src="https://images-na.ssl-images-amazon.com/images/I/41hbmiP+77L._AC_UL450_SR450,320_.jpg"
-                      alt={product.descripcion}
-                      onClick={handleImageClick}
-                    />
-                  </div>
-                  <div className="card__product__data">
-                    <div className="card__product__header">
-                      <h2>{product.nombre}</h2>
-                    </div>
-                    <div className="card_product_description">
-                      <p>{product.descripcion}</p>
-                    </div>
-                    <div className="card_product_price">
-                      <p>${product.precio}</p>
-                    </div>
-                    {/* <div className="card_product_codigo_barras">
-                      <p>{product.codigo_barras}</p>
-                    </div> */}
-                  </div>
-                </div>
-              </Item>
-            </Grid>
+            <Product key={product.id} product={product}></Product>
           ))}
-        </Grid>
-      </Box>
+        </AnimatePresence>
+      </div>
     </>
   );
 };

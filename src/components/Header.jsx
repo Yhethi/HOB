@@ -30,6 +30,7 @@ import { getProductFilter } from "../redux/slices/productsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { getDarkMode } from "../js/changeColor";
 import { setShowCart } from "../redux/slices/cartSlice";
+import { toggleSidebar } from "../redux/slices/sidebarSlice";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -74,11 +75,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  // const [showCart, setShowCart] = useState(false);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const [isDarkMode, setIsDarkMode] = useState(true); // Empieza en modo oscuro
+  const isPulsing = useSelector((state) => state.cart.pulse);
   // Redux
   const dispatch = useDispatch();
 
@@ -88,10 +89,11 @@ export const Header = () => {
   };
   useEffect(() => {
     togglePrimaryColor();
-    dispatch(setShowCart(false));
   }, []);
 
   const showCart = useSelector((state) => state.cart.visible);
+  const getSidebarStatus = useSelector((state) => state.sidebar.isOpen);
+  const totalItems = useSelector((state) => state.cart.products.length);
   const toggleShowCart = () => {
     dispatch(setShowCart(!showCart));
   };
@@ -115,6 +117,10 @@ export const Header = () => {
 
   const handleSearch = (e) => {
     dispatch(getProductFilter(e.target.value));
+  };
+
+  const handleToggleSidebar = () => {
+    dispatch(toggleSidebar(!getSidebarStatus));
   };
 
   const menuId = "primary-search-account-menu";
@@ -245,6 +251,7 @@ export const Header = () => {
                 color="inherit"
                 aria-label="open drawer"
                 sx={{ mr: 2 }}
+                onClick={handleToggleSidebar}
               >
                 <MenuIcon />
               </IconButton>
@@ -262,6 +269,7 @@ export const Header = () => {
                   <SearchIcon />
                 </SearchIconWrapper>
                 <StyledInputBase
+                  className="input__search"
                   placeholder="Search…"
                   inputProps={{ "aria-label": "search" }}
                   onChange={handleSearch}
@@ -302,8 +310,9 @@ export const Header = () => {
                   aria-label="show 4 new mails"
                   color="inherit"
                   onClick={toggleShowCart}
+                  className={`cart-button ${isPulsing ? "pulse" : ""}`}
                 >
-                  <Badge badgeContent={showCart ? "on" : "off"} color="error">
+                  <Badge badgeContent={totalItems} color="error">
                     <ShoppingCartIcon />
                   </Badge>
                 </IconButton>
@@ -325,8 +334,9 @@ export const Header = () => {
                   aria-label="show 4 new mails"
                   color="inherit"
                   onClick={toggleShowCart}
+                  className={`cart-button ${isPulsing ? "pulse" : ""}`}
                 >
-                  <Badge badgeContent={showCart ? "on" : "off"} color="error">
+                  <Badge badgeContent={totalItems} color="error">
                     <ShoppingCartIcon />
                   </Badge>
                 </IconButton>

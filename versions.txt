@@ -12,3 +12,6 @@
 
 1.021
 - Menu MObile version background primary fixed
+
+1.03
+- Cart styled added, and logic with products and animations etc. Is a big updated

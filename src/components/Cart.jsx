@@ -1,48 +1,82 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import "../assets/styles/cart.scss";
 import { useDispatch, useSelector } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
-import { setShowCart } from "../redux/slices/cartSlice";
+import { deleteCartItem, setShowCart } from "../redux/slices/cartSlice";
+import { FaRegTrashCan } from "react-icons/fa6";
+
 export const Cart = () => {
   const showCart = useSelector((state) => state.cart.visible);
   const dispatch = useDispatch();
+  const cartContainerRef = useRef(null);
   useEffect(() => {
-    const cartContainer = document.querySelector(".cart__global");
-    if (showCart) {
-      cartContainer.style.transform = "translateX(0px)";
-    } else {
-      cartContainer.style.transform = "translateX(400px)";
+    if (cartContainerRef.current) {
+      cartContainerRef.current.style.transform = showCart
+        ? "translateX(0)"
+        : "translateX(1500px)";
     }
   }, [showCart]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        dispatch(setShowCart(false)); 
+      } else {
+        dispatch(setShowCart(true));
+      }
+    };
+    // Ejecuta la función una vez cuando el componente se monta
+    handleResize();
+    // Escucha los cambios de tamaño de pantalla
+    window.addEventListener("resize", handleResize);
+    // Limpia el evento al desmontar el componente
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [dispatch]);
+
   const toggleShowCart = () => {
     dispatch(setShowCart(!showCart));
   };
+  const cartItems = useSelector((state) => state.cart.products);
+
+  const handleDeleteItem = (id) => {
+    dispatch(deleteCartItem(id));
+  };
   return (
-    <div className="cart__global">
+    <div className="cart__global" ref={cartContainerRef}>
       <div className="cart__close">
         <CloseIcon onClick={toggleShowCart} />
       </div>
       <div className="cart__container__cards">
-        <div className="cart__card">
-          <div className="card__image">
-            <img
-              src="https://images-na.ssl-images-amazon.com/images/I/41hbmiP+77L._AC_UL450_SR450,320_.jpg"
-              alt=""
-            />
-          </div>
-          <div className="cart__title">test__title</div>
-          <div className="card__quantity">0</div>
-        </div>
-        <div className="cart__card">
-          <div className="card__image">
-            <img
-              src="https://images-na.ssl-images-amazon.com/images/I/41hbmiP+77L._AC_UL450_SR450,320_.jpg"
-              alt=""
-            />
-          </div>
-          <div className="cart__title">test__title</div>
-          <div className="card__quantity">0</div>
-        </div>
+        {cartItems.map((item) => {
+          return (
+            <div className="cart__card" key={item.id}>
+              <div
+                className="delete__button"
+                onClick={() => {
+                  handleDeleteItem(item.id);
+                }}
+              >
+                <FaRegTrashCan />
+              </div>
+              <div className="card__image">
+                <img src={item.imagen_url} alt={item.nombre} />
+              </div>
+              <div className="cart__info">
+                <div className="cart__title">{item.nombre}</div>
+                <div className="cart__barcode">
+                  Código: {item.codigo_barras}
+                </div>
+                <div className="cart__description">{item.descripcion}</div>
+                <div className="cart__price">
+                  Precio: ${item.precio.toFixed(2)}
+                </div>
+                <div className="cart__quantity">Cantidad: {item.cantidad}</div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

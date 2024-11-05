@@ -1,19 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// const initialState = [
-//   {
-//     id: 0,
-//     usuario_id: 0,
-//     descripcion: "",
-//     nombre: "",
-//     precio: 0,
-//     imagen_url:
-//       "https://orientalgeneralstores.co.ke/wp-content/uploads/2022/12/test-product.jpg",
-//     codigo_barras: "",
-//   },
-
-// ];
-
 const initialState = {
   products: [
     {
@@ -35,13 +21,11 @@ export const productsSlice = createSlice({
   initialState,
   reducers: {
     setProducts: (state, action) => {
-      state.allProducts = action.payload; // Guarda una copia de los productos originales
-      state.products = action.payload; // Guarda una copia de los productos originales
+      state.allProducts = action.payload;
+      state.products = action.payload;
     },
     getProductFilter: (state, action) => {
       const textToFind = action.payload.toLowerCase();
-
-      // Filtrar productos desde `allProducts`, no desde `products`
       state.products = state.allProducts.filter((element) => {
         return (
           element.id.toString().includes(textToFind) ||
