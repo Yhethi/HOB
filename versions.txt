@@ -28,3 +28,6 @@
 
 1.041
 - Overflow y auto cart
+
+1.042
+- Height cart
