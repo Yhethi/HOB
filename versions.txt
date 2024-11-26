@@ -25,3 +25,6 @@
 - Mas logica al carrito de compras
 - Se actualizo el scss de varios elementos
 - Los productos son dinamicos, ya sean los que se muestran en pantalla o los que salen en el carrito
+
+1.041
+- Overflow y auto cart
