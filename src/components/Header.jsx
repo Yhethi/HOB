@@ -25,7 +25,7 @@ import { useState } from "react";
 // Icons
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-
+import HomeIcon from "@mui/icons-material/Home";
 import { getProductFilter } from "../redux/slices/productsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { getDarkMode } from "../js/changeColor";
@@ -33,6 +33,8 @@ import { setShowCart } from "../redux/slices/cartSlice";
 import { toggleSidebar } from "../redux/slices/sidebarSlice";
 import { Sidebar } from "./Sidebar";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../assets/hooks/useAuth";
+import { logoutUser } from "../redux/slices/authSlice";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -129,6 +131,8 @@ export const Header = () => {
     navigate(url);
   };
 
+  const isLogged = useAuth();
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -151,20 +155,48 @@ export const Header = () => {
         },
       }}
     >
-      <MenuItem
+      {!isLogged && (
+        <MenuItem
+          onClick={() => {
+            handleGoTo("/login");
+          }}
+        >
+          Iniciar Sesion
+        </MenuItem>
+      )}
+      {isLogged && (
+        <MenuItem
+          onClick={() => {
+            handleGoTo("/perfil");
+          }}
+        >
+          My account
+        </MenuItem>
+      )}
+      {isLogged && (
+        <MenuItem
+          onClick={() => {
+            dispatch(logoutUser());
+            handleGoTo("/");
+          }}
+        >
+          Cerrar Sesion
+        </MenuItem>
+      )}
+      {/* <MenuItem
+        onClick={() => {
+          handleGoTo("/register");
+        }}
+      >
+        Registrarse
+      </MenuItem> */}
+      {/* <MenuItem
         onClick={() => {
           handleGoTo("/perfil/1");
         }}
       >
         Profile
-      </MenuItem>
-      <MenuItem
-        onClick={() => {
-          handleGoTo("/perfil/2");
-        }}
-      >
-        My account
-      </MenuItem>
+      </MenuItem> */}
     </Menu>
   );
 
@@ -228,7 +260,7 @@ export const Header = () => {
         >
           <AccountCircle />
         </IconButton>
-        <p>Profile</p>
+        <p>Perfil</p>
       </MenuItem>
     </Menu>
   );
@@ -274,15 +306,19 @@ export const Header = () => {
               >
                 <MenuIcon />
               </IconButton>
-              {/* 
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ display: { xs: "none", sm: "block" } }}
-            >
-              MUI
-            </Typography> */}
+
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="open drawer"
+                sx={{ mr: 2 }}
+                onClick={() => {
+                  navigate("/");
+                }}
+              >
+                <HomeIcon />
+              </IconButton>
               <Search>
                 <SearchIconWrapper>
                   <SearchIcon />

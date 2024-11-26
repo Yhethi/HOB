@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../assets/styles/userProfile.scss";
 import {
   FaUserEdit,
@@ -7,11 +7,14 @@ import {
   FaMapMarkerAlt,
 } from "react-icons/fa";
 import { Header } from "./Header";
+import { useSelector } from "react-redux";
 
 export const UserProfile = () => {
+  const user = useSelector((state) => state.auth.user);
+
   const userData = {
-    name: "John Doe",
-    email: "john.doe@example.com",
+    name: user.nombre,
+    email: user.email,
     phone: "+1 (555) 123-4567",
     address: "1234 Elm Street, Springfield, IL",
     profileImage: "https://via.placeholder.com/150", // Link a una imagen de perfil

@@ -19,13 +19,6 @@ function App() {
   const [descripcion, setDescripcion] = useState("D");
   const [productos, setProductos] = useState([]);
   const dispatch = useDispatch();
-  useEffect(() => {
-    // fetch("/api/productos")
-    //   .then((response) => response.json())
-    //   .then((data) => dispatch(setProducts(data)))
-    //   .catch((error) => console.error("Error fetching productos:", error));
-    dispatch(setProducts(testProducts));
-  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault(); // Previene el comportamiento por defecto del formulario
@@ -65,7 +58,7 @@ function App() {
       <Header />
       <Products />
       <Cart />
-      
+
       {/* <Scanner /> */}
       {/* <h1>Productos</h1>
       <ul>

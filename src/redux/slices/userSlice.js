@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  name: "",
-  username: "",
-  email: "",
+  addUser: { name: "", username: "", email: "" },
+  loginUser: {
+    isLogged: JSON.parse(localStorage.getItem("isLogged")) || false,
+  },
 };
 
 export const userSlice = createSlice({
@@ -12,9 +13,17 @@ export const userSlice = createSlice({
   reducers: {
     addUser: (state, action) => {
       const { name, username, email } = action.payload;
-      state.name = name;
-      state.username = username;
-      state.email = email;
+      state.addUser.name = name;
+      state.addUser.username = username;
+      state.addUser.email = email;
+    },
+    // loginUser: (state, action) => {
+    //   state.loginUser.isLogged = action.payload;
+    //   localStorage.setItem("isLogged", JSON.stringify(action.payload)); // Guarda el estado en localStorage
+    // },
+    logoutUser: (state) => {
+      state.loginUser.isLogged = false;
+      localStorage.removeItem("isLogged"); // Elimina el estado de localStorage al cerrar sesión
     },
   },
 });

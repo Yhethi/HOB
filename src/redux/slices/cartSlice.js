@@ -47,6 +47,31 @@ export const cartSlice = createSlice({
         });
       }
     },
+    additionCartItem: (state, action) => {
+      const { id, cantidad } = action.payload;
+      const existingProductIndex = state.products.findIndex(
+        (product) => product.id === id
+      );
+
+      if (existingProductIndex !== -1) {
+        state.products[existingProductIndex].cantidad = cantidad;
+      } else {
+        state.products.push({ id, cantidad });
+      }
+    },
+    subtractCartItem: (state, action) => {
+      const { id, cantidad } = action.payload;
+      const existingProductIndex = state.products.findIndex(
+        (product) => product.id === id
+      );
+
+      if (existingProductIndex !== -1) {
+        state.products[existingProductIndex].cantidad -= cantidad;
+        if (state.products[existingProductIndex].cantidad == 0) {
+          state.products.splice(existingProductIndex, 1);
+        }
+      }
+    },
     deleteCartItem: (state, action) => {
       const existingProductIndex = state.products.findIndex(
         (product) => product.id === action.payload
@@ -58,6 +83,12 @@ export const cartSlice = createSlice({
   },
 });
 
-export const { addCartItem, setShowCart, setPulseCart, deleteCartItem } =
-  cartSlice.actions;
+export const {
+  addCartItem,
+  setShowCart,
+  setPulseCart,
+  additionCartItem,
+  subtractCartItem,
+  deleteCartItem,
+} = cartSlice.actions;
 export default cartSlice.reducer;

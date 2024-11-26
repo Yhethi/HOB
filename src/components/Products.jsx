@@ -13,6 +13,9 @@ import { Product } from "./Product";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
 import { useRef } from "react";
+import { setProducts } from "../redux/slices/productsSlice";
+import { store } from "../redux/store";
+import { testProducts } from "../test/listProducts";
 
 export const Products = () => {
   // Redux
@@ -21,6 +24,18 @@ export const Products = () => {
   // Redux
   const boxProductContainer = useRef(null);
   const showCart = useSelector((state) => state.cart.visible);
+  const user = useSelector((state) => state.auth.user);
+
+  useEffect(() => {
+    if (user) {
+      fetch(`/api/productos?userId=${user.id}`)
+        .then((response) => response.json())
+        .then((data) => dispatch(setProducts(data)))
+        .catch((error) => console.error("Error fetching productos:", error));
+    } else {
+      dispatch(setProducts(testProducts));
+    }
+  }, [user, dispatch]);
 
   useEffect(() => {
     if (boxProductContainer.current) {

@@ -18,3 +18,10 @@
 
 1.031
 - Added Page Not Found and React Router
+
+1.04
+
+- Se añadio la logica de inicio de sesion
+- Mas logica al carrito de compras
+- Se actualizo el scss de varios elementos
+- Los productos son dinamicos, ya sean los que se muestran en pantalla o los que salen en el carrito
