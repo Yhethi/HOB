@@ -26,27 +26,30 @@ export const Cart = () => {
         : "translateX(1500px)";
     }
   }, [showCart]);
+  const [prevWidth, setPrevWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 768) {
+      const currentWidth = window.innerWidth;
+      if (prevWidth > 768 && currentWidth <= 768) {
         dispatch(setShowCart(false));
-      } else {
+      } else if (prevWidth <= 768 && currentWidth > 768) {
         dispatch(setShowCart(true));
       }
+      setPrevWidth(currentWidth);
     };
-    handleResize();
+
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [dispatch]);
+  }, [dispatch, prevWidth]);
 
   const toggleShowCart = () => {
     dispatch(setShowCart(!showCart));
   };
   const cartItems = useSelector((state) => state.cart.products);
-
+  const totales = useSelector((state) => state.cart.totales);
   const handleDeleteItem = (id) => {
     dispatch(deleteCartItem(id));
   };
@@ -64,6 +67,7 @@ export const Cart = () => {
     } else if (element && type == "noAdd" && element.cantidad >= 1) {
       dispatch(subtractCartItem({ ...element, cantidad: 1 }));
     }
+    console.log(totales);
   };
 
   const handleInputChange = (e, id) => {
@@ -134,7 +138,7 @@ export const Cart = () => {
                       <label>Cantidad:</label>
                       <div className="buttons_cantidad">
                         <button
-                          className="set_quantity"
+                          className="set_quantity resta"
                           onClick={() => {
                             handleAddOrSubtract(item.id, "noAdd");
                           }}
@@ -153,7 +157,7 @@ export const Cart = () => {
                           }}
                         />
                         <button
-                          className="set_quantity"
+                          className="set_quantity suma"
                           onClick={() => {
                             handleAddOrSubtract(item.id, "add");
                           }}
@@ -168,16 +172,16 @@ export const Cart = () => {
               </div>
             );
           })}
+          <div className="contenedor__totales">
+            <div className="totales">
+              <span>BS.{totales.bolivares}</span>
+              <span>Cop {totales.pesos}</span>
+              <span>$ {totales.dolares}</span>
+            </div>
+            <AnimatedButton />
+          </div>
         </div>
       )}
-      <div className="contenedor__totales">
-        <div className="totales">
-          <span>BS.1234</span>
-          <span>Cop 1234</span>
-          <span>$ 1234</span>
-        </div>
-        <AnimatedButton />
-      </div>
     </div>
   );
 };

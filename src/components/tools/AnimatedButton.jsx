@@ -95,7 +95,7 @@ const AnimatedButton = () => {
     <div>
       <div className="button" ref={buttonRef} onClick={handleAnimation}>
         <div className="text" ref={textRef}>
-          Submit
+          Finalizar Compra
         </div>
       </div>
       <div className="progress-bar" ref={progressBarRef}>

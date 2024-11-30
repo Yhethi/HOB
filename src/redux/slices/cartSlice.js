@@ -1,7 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { calculateTotals } from "../../assets/utils/cartUtils";
 
 const initialState = {
   products: [],
+  totales: {
+    bolivares: 0.0,
+    pesos: 0.0,
+    dolares: 0.0,
+  },
+  binanceVES: 0,
   visible: false,
   pulse: false,
 };
@@ -46,6 +53,15 @@ export const cartSlice = createSlice({
           cantidad,
         });
       }
+
+      state.totales = calculateTotals(
+        state.products,
+        {
+          bolivarRate: 35.5,
+          pesoRate: 4000,
+        },
+        state.binanceVES
+      );
     },
     additionCartItem: (state, action) => {
       const { id, cantidad } = action.payload;
@@ -58,6 +74,14 @@ export const cartSlice = createSlice({
       } else {
         state.products.push({ id, cantidad });
       }
+      state.totales = calculateTotals(
+        state.products,
+        {
+          bolivarRate: 35.5,
+          pesoRate: 4000,
+        },
+        state.binanceVES
+      );
     },
     subtractCartItem: (state, action) => {
       const { id, cantidad } = action.payload;
@@ -71,6 +95,17 @@ export const cartSlice = createSlice({
           state.products.splice(existingProductIndex, 1);
         }
       }
+      state.totales = calculateTotals(
+        state.products,
+        {
+          bolivarRate: 35.5,
+          pesoRate: 4000,
+        },
+        state.binanceVES
+      );
+    },
+    setBinanceVES: (state, action) => {
+      state.binanceVES = action.payload;
     },
     deleteCartItem: (state, action) => {
       const existingProductIndex = state.products.findIndex(
@@ -79,6 +114,14 @@ export const cartSlice = createSlice({
       if (existingProductIndex !== -1) {
         state.products.splice(existingProductIndex, 1);
       }
+      state.totales = calculateTotals(
+        state.products,
+        {
+          bolivarRate: 35.5,
+          pesoRate: 4000,
+        },
+        state.binanceVES
+      );
     },
   },
 });
@@ -89,6 +132,7 @@ export const {
   setPulseCart,
   additionCartItem,
   subtractCartItem,
+  setBinanceVES,
   deleteCartItem,
 } = cartSlice.actions;
 export default cartSlice.reducer;

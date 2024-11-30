@@ -12,6 +12,7 @@ import { Cart } from "./components/Cart";
 import { testProducts } from "./test/listProducts";
 import { Sidebar } from "./components/Sidebar";
 import { UserProfile } from "./components/UserProfile";
+import PriceFetcher from "./components/tools/PriceFetcher";
 
 function App() {
   const [codigo_barras, setCodigo_barras] = useState("0");
@@ -58,7 +59,7 @@ function App() {
       <Header />
       <Products />
       <Cart />
-
+      <PriceFetcher />
       {/* <Scanner /> */}
       {/* <h1>Productos</h1>
       <ul>

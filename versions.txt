@@ -31,3 +31,7 @@
 
 1.042
 - Height cart
+
+1.043
+- Carrito mejorado
+- Totales dinamicos
