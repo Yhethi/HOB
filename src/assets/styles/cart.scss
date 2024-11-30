@@ -101,8 +101,7 @@ $mobile-cart-width: 100vw;
   }
 
   .cart_with_products {
-    height: calc(100vh - 840px);
-    background-color: #002bff;
+    height: 100%;
     position: relative;
   }
 
@@ -247,7 +246,7 @@ $mobile-cart-width: 100vw;
   .contenedor__totales {
     background: $primary-color;
     width: 100%;
-    height: 100%;
+    height: 17%;
     border-top: 2px solid $text-dark-mode;
     padding: 10px;
     padding-bottom: 0;
@@ -260,6 +259,7 @@ $mobile-cart-width: 100vw;
       gap: 7px;
       font-size: 1.2rem;
       color: $text-dark-mode;
+      padding-bottom: 5px;
     }
     .glow-on-hover {
       width: 100%;

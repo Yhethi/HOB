@@ -75,3 +75,6 @@
 1.056
 - Cart mejorado
 - Montos totales ajustados al mercado
+
+1.057
+- Estilos al cart mas optimos
