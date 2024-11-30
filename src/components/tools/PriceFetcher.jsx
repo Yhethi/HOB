@@ -28,10 +28,7 @@ const PriceFetcher = () => {
         let precio = parseFloat(data.price);
 
         if (!isNaN(precio)) {
-          // console.log("Precio Actual Binance: ",precio);
-          // console.log("Se le añaden: ",bsExtra);
           let suma = precio + bsExtra;
-          // console.log("Total suma: ", suma.toFixed(2));
           dispatch(setBinanceVES(suma));
         } else {
           console.error("Invalid price data:", data.price);

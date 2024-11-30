@@ -41,3 +41,6 @@
 
 1.045
 - Test con la API original con python
+
+1.046
+- Test python API #2
