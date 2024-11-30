@@ -21,15 +21,15 @@ const PriceFetcher = () => {
             price: "44.000",
           };
         } else {
-          const dataVes = await axios.get("/api/pricesVes").data;
-          const dataCop = await axios.get("/api/pricesCop").data;
-          valueVes = dataVes;
-          valueCop = dataCop;
+          const { data } = await axios.get("/api/prices");
+          valueVes = data.priceVES;
+          valueCop = data.priceCOP;
+          console.log("DATA:", data);
         }
         let dataVes = valueVes;
 
-        let precioVes = parseFloat(dataVes.price);
-        let precioCop = parseFloat(dataCop.price);
+        let precioVes = parseFloat(valueVes);
+        let precioCop = parseFloat(valueCop);
 
         if (!isNaN(precioVes) && !isNaN(precioCop)) {
           let suma = precioVes + bsExtra;

@@ -1,8 +1,7 @@
 {
   "version": 2,
   "builds": [
-    { "src": "api/priceVes.py", "use": "@vercel/python" },
-    { "src": "api/priceCop.py", "use": "@vercel/python" },
+    { "src": "api/price.py", "use": "@vercel/python" },
     {
       "src": "package.json",
       "use": "@vercel/static-build",
@@ -10,8 +9,7 @@
     }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/api/priceVes.py" },
-    { "src": "/api/(.*)", "dest": "/api/priceCop.py" },
+    { "src": "/api/(.*)", "dest": "/api/price.py" },
     { "src": "/(.*)", "dest": "/dist/$1" }
   ]
 }

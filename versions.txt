@@ -65,3 +65,6 @@
 
 1.053
 - Arreglando la ruta de priceCop en vercel.json #2
+
+1.054
+- Precios solo en un archivo Python
