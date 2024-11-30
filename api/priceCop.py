@@ -4,7 +4,7 @@ import requests
 
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
-        if self.path == "/api/pricesVes":
+        if self.path == "/api/pricesCop":
             try:
                 url = "https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search"
                 headers = {
@@ -13,7 +13,7 @@ class Handler(BaseHTTPRequestHandler):
                 }
                 data = {
                     "asset": "USDT",
-                    "fiat": "VES",
+                    "fiat": "COP",
                     "tradeType": "BUY",
                     "page": 1,
                     "rows": 10,

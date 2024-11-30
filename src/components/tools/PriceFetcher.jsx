@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { setBinanceVES } from "../../redux/slices/cartSlice";
+import { setBinanceCOP, setBinanceVES } from "../../redux/slices/cartSlice";
 
 const PriceFetcher = () => {
   const [refreshPrice, setRefreshPrice] = useState(false);
@@ -12,26 +12,31 @@ const PriceFetcher = () => {
   useEffect(() => {
     const fetchPrice = async () => {
       try {
-        let value;
+        let valueVes;
+        let valueCop;
 
         if (isDev === "true") {
-          // const { data } = await axios.get("http://localhost:5000/api/prices");
-          value = {
+          // const { data } = await axios.get("http://localhost:5000/api/pricesVes");
+          valueVes = {
             price: "44.000",
           };
         } else {
-          const { data } = await axios.get("/api/prices");
-          value = data;
+          const dataVes = await axios.get("/api/pricesVes").data;
+          const dataCop = await axios.get("/api/pricesCop").data;
+          valueVes = dataVes;
+          valueCop = dataCop;
         }
-        let data = value;
+        let dataVes = valueVes;
 
-        let precio = parseFloat(data.price);
+        let precioVes = parseFloat(dataVes.price);
+        let precioCop = parseFloat(dataCop.price);
 
-        if (!isNaN(precio)) {
-          let suma = precio + bsExtra;
+        if (!isNaN(precioVes) && !isNaN(precioCop)) {
+          let suma = precioVes + bsExtra;
           dispatch(setBinanceVES(suma));
+          dispatch(setBinanceCOP(precioCop));
         } else {
-          console.error("Invalid price data:", data.price);
+          console.error("Invalid price data:", dataVes.price);
         }
       } catch (error) {
         console.error("Error fetching price:", error);

@@ -56,3 +56,6 @@
 
 1.05
 - Actulizado el height del cart
+
+1.051
+- Test de COP de binance

@@ -1,6 +1,7 @@
-export const calculateTotals = (products, rates, binanceVES) => {
+export const calculateTotals = (products, rates, binanceVES, binanceCOP) => {
   const { bolivarRate, pesoRate } = rates;
   console.log("binanceVES:", binanceVES);
+  console.log("binanceCOP:", binanceCOP);
 
   const totals = products.reduce(
     (acc, item) => {
@@ -9,7 +10,7 @@ export const calculateTotals = (products, rates, binanceVES) => {
       console.log("subtotalVES:", subtotalVES);
       acc.dolares += parseFloat(subtotalDolares.toFixed(2));
       acc.bolivares += subtotalVES;
-      acc.pesos += parseFloat((subtotalDolares * pesoRate).toFixed(2));
+      acc.pesos += parseFloat((subtotalDolares * binanceCOP).toFixed(2));
       return acc;
     },
     { bolivares: 0.0, pesos: 0.0, dolares: 0.0 }

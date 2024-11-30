@@ -9,6 +9,7 @@ const initialState = {
     dolares: 0.0,
   },
   binanceVES: 0,
+  binanceCOP: 0,
   visible: false,
   pulse: false,
 };
@@ -60,7 +61,8 @@ export const cartSlice = createSlice({
           bolivarRate: 35.5,
           pesoRate: 4000,
         },
-        state.binanceVES
+        state.binanceVES,
+        state.binanceCOP
       );
     },
     additionCartItem: (state, action) => {
@@ -80,7 +82,8 @@ export const cartSlice = createSlice({
           bolivarRate: 35.5,
           pesoRate: 4000,
         },
-        state.binanceVES
+        state.binanceVES,
+        state.binanceCOP
       );
     },
     subtractCartItem: (state, action) => {
@@ -101,11 +104,15 @@ export const cartSlice = createSlice({
           bolivarRate: 35.5,
           pesoRate: 4000,
         },
-        state.binanceVES
+        state.binanceVES,
+        state.binanceCOP
       );
     },
     setBinanceVES: (state, action) => {
       state.binanceVES = action.payload;
+    },
+    setBinanceCOP: (state, action) => {
+      state.binanceCOP = action.payload;
     },
     deleteCartItem: (state, action) => {
       const existingProductIndex = state.products.findIndex(
@@ -120,7 +127,8 @@ export const cartSlice = createSlice({
           bolivarRate: 35.5,
           pesoRate: 4000,
         },
-        state.binanceVES
+        state.binanceVES,
+        state.binanceCOP
       );
     },
   },
@@ -133,6 +141,7 @@ export const {
   additionCartItem,
   subtractCartItem,
   setBinanceVES,
+  setBinanceCOP,
   deleteCartItem,
 } = cartSlice.actions;
 export default cartSlice.reducer;
