@@ -19,29 +19,6 @@ const PriceFetcher = () => {
           value = {
             price: "44.000",
           };
-
-          try {
-            const vesResponse = await axios.get(
-              "https://api.binance.com/api/v3/ticker/price?symbol=USDTVES"
-            );
-            const copResponse = await axios.get(
-              "https://api.binance.com/api/v3/ticker/price?symbol=USDTCOP"
-            );
-
-            const vesToUsd = parseFloat(vesResponse.data.price);
-            const copToUsd = parseFloat(copResponse.data.price);
-
-            const vesToCop = vesToUsd / copToUsd;
-
-            console.log(`1 VES = ${vesToCop} COP`);
-            console.log("BINANCE: ves, cop: ", vesToUsd, copToUsd);
-
-            return vesToCop;
-          } catch (error) {
-            console.error("Error obteniendo la tasa VES/COP:", error);
-            return null;
-          }
-
         } else {
           const { data } = await axios.get("/api/prices");
           value = data;
@@ -49,13 +26,12 @@ const PriceFetcher = () => {
         let data = value;
 
         let precio = parseFloat(data.price);
-        console.log("hello", precio);
 
         if (!isNaN(precio)) {
           // console.log("Precio Actual Binance: ",precio);
           // console.log("Se le añaden: ",bsExtra);
           let suma = precio + bsExtra;
-          console.log("Total suma: ", suma.toFixed(2));
+          // console.log("Total suma: ", suma.toFixed(2));
           dispatch(setBinanceVES(suma));
         } else {
           console.error("Invalid price data:", data.price);

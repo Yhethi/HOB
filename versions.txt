@@ -38,3 +38,6 @@
 
 1.044
 - Testiando APIs de binance (VES,COP) con axios desde Vercel
+
+1.045
+- Test con la API original con python
