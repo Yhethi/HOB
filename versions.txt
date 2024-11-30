@@ -59,3 +59,6 @@
 
 1.051
 - Test de COP de binance
+
+1.052
+- Arreglando la ruta de priceCop en vercel.json
