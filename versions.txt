@@ -35,3 +35,6 @@
 1.043
 - Carrito mejorado
 - Totales dinamicos
+
+1.044
+- Testiando APIs de binance (VES,COP) con axios desde Vercel

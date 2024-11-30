@@ -20,27 +20,27 @@ const PriceFetcher = () => {
             price: "44.000",
           };
 
-          // try {
-          //   const vesResponse = await axios.get(
-          //     "https://api.binance.com/api/v3/ticker/price?symbol=USDTVES"
-          //   );
-          //   const copResponse = await axios.get(
-          //     "https://api.binance.com/api/v3/ticker/price?symbol=USDTCOP"
-          //   );
+          try {
+            const vesResponse = await axios.get(
+              "https://api.binance.com/api/v3/ticker/price?symbol=USDTVES"
+            );
+            const copResponse = await axios.get(
+              "https://api.binance.com/api/v3/ticker/price?symbol=USDTCOP"
+            );
 
-          //   const vesToUsd = parseFloat(vesResponse.data.price);
-          //   const copToUsd = parseFloat(copResponse.data.price);
+            const vesToUsd = parseFloat(vesResponse.data.price);
+            const copToUsd = parseFloat(copResponse.data.price);
 
-          //   const vesToCop = vesToUsd / copToUsd;
+            const vesToCop = vesToUsd / copToUsd;
 
-          //   console.log(`1 VES = ${vesToCop} COP`);
-          //   console.log("BINANCE: ves, cop: ", vesToUsd, copToUsd);
+            console.log(`1 VES = ${vesToCop} COP`);
+            console.log("BINANCE: ves, cop: ", vesToUsd, copToUsd);
 
-          //   return vesToCop;
-          // } catch (error) {
-          //   console.error("Error obteniendo la tasa VES/COP:", error);
-          //   return null;
-          // }
+            return vesToCop;
+          } catch (error) {
+            console.error("Error obteniendo la tasa VES/COP:", error);
+            return null;
+          }
 
         } else {
           const { data } = await axios.get("/api/prices");
