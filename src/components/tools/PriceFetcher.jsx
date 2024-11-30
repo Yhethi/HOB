@@ -22,9 +22,9 @@ const PriceFetcher = () => {
           };
         } else {
           const { data } = await axios.get("/api/prices");
+          console.log("DATA:", data);
           valueVes = data.priceVES;
           valueCop = data.priceCOP;
-          console.log("DATA:", data);
         }
         let dataVes = valueVes;
 
