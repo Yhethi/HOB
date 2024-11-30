@@ -53,3 +53,6 @@
 
 1.049
 - Test python API #5
+
+1.05
+- Actulizado el height del cart
