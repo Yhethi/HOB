@@ -71,3 +71,7 @@
 
 1.055
 - Arreglando la ruta de prices en vercel.json
+
+1.056
+- Cart mejorado
+- Montos totales ajustados al mercado

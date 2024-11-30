@@ -76,7 +76,7 @@ const AnimatedButton = () => {
         targets: buttonRef.current,
         duration: 10,
         width: "100%",
-        height: "50px",
+        height: "36px",
         borderRadius: "5px",
         easing: "easeOutCubic",
         complete: () => {
@@ -92,7 +92,7 @@ const AnimatedButton = () => {
   };
 
   return (
-    <div>
+    <>
       <div className="button" ref={buttonRef} onClick={handleAnimation}>
         <div className="text" ref={textRef}>
           Finalizar Compra
@@ -110,7 +110,7 @@ const AnimatedButton = () => {
           </svg>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

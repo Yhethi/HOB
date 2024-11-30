@@ -36,14 +36,50 @@ export const Products = () => {
       dispatch(setProducts(testProducts));
     }
   }, [user, dispatch]);
+  const [prevWidth, setPrevWidth] = useState(window.innerWidth);
 
   useEffect(() => {
+    const currentWidth = window.innerWidth;
     if (boxProductContainer.current) {
+      if (currentWidth <= 768) {
+        boxProductContainer.current.style.transform = showCart
+          ? "translateX(-100%)"
+          : "translateX(0%)";
+      }
+    }
+    if (currentWidth > 768) {
       boxProductContainer.current.style.paddingRight = showCart
         ? "400px"
         : "0px";
     }
   }, [showCart]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const currentWidth = window.innerWidth;
+      if (prevWidth > 768 && currentWidth <= 768) {
+        boxProductContainer.current.style.transform = showCart
+          ? "translateX(-100%)"
+          : "translateX(0%)";
+        boxProductContainer.current.style.paddingRight = showCart
+          ? "0px"
+          : "0px";
+      } else if (prevWidth <= 768 && currentWidth > 768) {
+        boxProductContainer.current.style.paddingRight = showCart
+          ? "400px"
+          : "0px";
+        boxProductContainer.current.style.transform = showCart
+          ? "translateX(0%)"
+          : "translateX(0%)";
+      }
+      setPrevWidth(currentWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [dispatch, prevWidth]);
 
   useEffect(() => {
     setZoomDynamic();

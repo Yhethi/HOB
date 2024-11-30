@@ -112,71 +112,73 @@ export const Cart = () => {
           </div>
         </div>
       ) : (
-        <div className="cart__container__cards">
-          {cartItems.map((item, key) => {
-            return (
-              <div className="cart__card" key={item.id}>
-                <div
-                  className="delete__button"
-                  onClick={() => {
-                    handleDeleteItem(item.id);
-                  }}
-                >
-                  <FaRegTrashCan />
-                </div>
-                <div className="card__image">
-                  <img src={item.imagen_url} alt={item.nombre} />
-                </div>
-                <div className="cart__info">
-                  <div className="cart__title">{item.nombre}</div>
-                  {/* <div className="cart__description">{item.descripcion}</div> */}
-                  <div className="card_data">
-                    <div className="cart__price">
-                      Precio: ${item.precio.toFixed(2)}
-                    </div>
-                    <div className="cantidad_container">
-                      <label>Cantidad:</label>
-                      <div className="buttons_cantidad">
-                        <button
-                          className="set_quantity resta"
-                          onClick={() => {
-                            handleAddOrSubtract(item.id, "noAdd");
-                          }}
-                        >
-                          -
-                        </button>
-                        <input
-                          className="cart__quantity"
-                          max="999"
-                          value={item.cantidad}
-                          onChange={(e) => {
-                            handleInputChange(e, item.id);
-                          }}
-                          onBlur={() => {
-                            handleBlur(item.id);
-                          }}
-                        />
-                        <button
-                          className="set_quantity suma"
-                          onClick={() => {
-                            handleAddOrSubtract(item.id, "add");
-                          }}
-                        >
-                          +
-                        </button>
+        <div className="cart_with_products">
+          <div className="cart__container__cards">
+            {cartItems.map((item, key) => {
+              return (
+                <div className="cart__card" key={item.id}>
+                  <div
+                    className="delete__button"
+                    onClick={() => {
+                      handleDeleteItem(item.id);
+                    }}
+                  >
+                    <FaRegTrashCan />
+                  </div>
+                  <div className="card__image">
+                    <img src={item.imagen_url} alt={item.nombre} />
+                  </div>
+                  <div className="cart__info">
+                    <div className="cart__title">{item.nombre}</div>
+                    {/* <div className="cart__description">{item.descripcion}</div> */}
+                    <div className="card_data">
+                      <div className="cart__price">
+                        Precio: ${item.precio.toFixed(2)}
                       </div>
+                      <div className="cantidad_container">
+                        <label>Cantidad:</label>
+                        <div className="buttons_cantidad">
+                          <button
+                            className="set_quantity resta"
+                            onClick={() => {
+                              handleAddOrSubtract(item.id, "noAdd");
+                            }}
+                          >
+                            -
+                          </button>
+                          <input
+                            className="cart__quantity"
+                            max="999"
+                            value={item.cantidad}
+                            onChange={(e) => {
+                              handleInputChange(e, item.id);
+                            }}
+                            onBlur={() => {
+                              handleBlur(item.id);
+                            }}
+                          />
+                          <button
+                            className="set_quantity suma"
+                            onClick={() => {
+                              handleAddOrSubtract(item.id, "add");
+                            }}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                      {/* <div className="cart__barcode">#: {item.codigo_barras}</div> */}
                     </div>
-                    {/* <div className="cart__barcode">#: {item.codigo_barras}</div> */}
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
           <div className="contenedor__totales">
             <div className="totales">
-              <span>BS.{totales.bolivares}</span>
-              <span>Cop {totales.pesos}</span>
-              <span>$ {totales.dolares}</span>
+              <span>BS.{totales.bolivares.toFixed(2)}</span>
+              <span>Cop {Math.ceil(totales.pesos / 100) * 100}</span>
+              <span>$ {totales.dolares.toFixed(2)}</span>
             </div>
             <AnimatedButton />
           </div>

@@ -8,6 +8,7 @@ const PriceFetcher = () => {
   const [refreshPrice, setRefreshPrice] = useState(false);
   const isDev = import.meta.env.VITE_IS_DEV;
   const bsExtra = parseFloat(import.meta.env.VITE_VES_EXTRA_VALUE);
+  const copExtra = parseFloat(import.meta.env.VITE_COP_EXTRA_VALUE);
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchPrice = async () => {
@@ -16,10 +17,9 @@ const PriceFetcher = () => {
         let valueCop;
 
         if (isDev === "true") {
-          // const { data } = await axios.get("http://localhost:5000/api/pricesVes");
-          valueVes = {
-            price: "44.000",
-          };
+          valueVes = 55.0 + bsExtra;
+          valueCop = 4274.99 - copExtra;
+          console.log("DATA:", valueVes, valueCop);
         } else {
           const { data } = await axios.get("/api/prices");
           console.log("DATA:", data);
@@ -33,6 +33,7 @@ const PriceFetcher = () => {
 
         if (!isNaN(precioVes) && !isNaN(precioCop)) {
           let suma = precioVes + bsExtra;
+          let resta = precioCop - copExtra;
           dispatch(setBinanceVES(suma));
           dispatch(setBinanceCOP(precioCop));
         } else {
