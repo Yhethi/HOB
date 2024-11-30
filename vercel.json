@@ -10,8 +10,8 @@
     }
   ],
   "routes": [
-    { "src": "/api/priceVes", "dest": "/api/priceVes.py" },
-    { "src": "/api/priceCop", "dest": "/api/priceCop.py" },
+    { "src": "/api/(.*)", "dest": "/api/priceVes.py" },
+    { "src": "/api/(.*)", "dest": "/api/priceCop.py" },
     { "src": "/(.*)", "dest": "/dist/$1" }
   ]
 }

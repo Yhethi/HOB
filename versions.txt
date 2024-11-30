@@ -62,3 +62,6 @@
 
 1.052
 - Arreglando la ruta de priceCop en vercel.json
+
+1.053
+- Arreglando la ruta de priceCop en vercel.json #2
