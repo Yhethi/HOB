@@ -153,6 +153,13 @@ export const Header = () => {
     }, 400);
   };
 
+  const handleCloseCartIfMobile = () => {
+    const currentWidth = window.innerWidth;
+    if (currentWidth <= 768) {
+      dispatch(setShowCart(false));
+    }
+  };
+
   const isLogged = useAuth();
 
   const menuId = "primary-search-account-menu";
@@ -343,6 +350,7 @@ export const Header = () => {
                   placeholder="Search…"
                   inputProps={{ "aria-label": "search" }}
                   onChange={handleSearch}
+                  onClick={handleCloseCartIfMobile}
                 />
               </Search>
               <Box sx={{ flexGrow: 1 }} />

@@ -341,6 +341,7 @@ $mobile-cart-width: 100vw;
       display: flex;
       width: 100%;
       justify-content: space-between;
+      align-items: end;
     }
 
     .vaciar__button {
@@ -360,7 +361,7 @@ $mobile-cart-width: 100vw;
       color: rgb(255, 0, 0);
       transition: color 0.3s 0.1s ease-out;
       text-align: center;
-
+      margin-bottom: -17px;
       svg {
         fill: rgb(255, 0, 0);
         transition: 0.3s 0.1s ease-out;

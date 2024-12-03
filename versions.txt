@@ -91,3 +91,7 @@
 - Boton vaciar carrito
 - Test de facturacion con un alert
 - Boton registrarse
+
+1.061
+- Boton vaciar carrito y su flex acomodado
+- Cuando se le da al search y el carrito está activo, este se cerrará
