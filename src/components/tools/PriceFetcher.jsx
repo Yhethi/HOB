@@ -1,8 +1,12 @@
 // src/components/PriceFetcher.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { setBinanceCOP, setBinanceVES } from "../../redux/slices/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setRateCOP,
+  setRateUSD,
+  setRateVES,
+} from "../../redux/slices/cartSlice";
 
 const PriceFetcher = () => {
   const [refreshPrice, setRefreshPrice] = useState(false);
@@ -10,37 +14,61 @@ const PriceFetcher = () => {
   const bsExtra = parseFloat(import.meta.env.VITE_VES_EXTRA_VALUE);
   const copExtra = parseFloat(import.meta.env.VITE_COP_EXTRA_VALUE);
   const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.auth.user);
+
+  async function fetchCustomRate(userId) {
+    try {
+      const response = await axios.get("/api/customRate", {
+        params: { userId },
+      });
+
+      return response.data; 
+    } catch (error) {
+      console.error(
+        "Error al obtener los custom rates:",
+        error.response?.data || error.message
+      );
+      throw error;
+    }
+  }
+
   useEffect(() => {
     const fetchPrice = async () => {
+      let valueVes;
+      let valueCop;
+      let valueUsd = 1;
       try {
-        let valueVes;
-        let valueCop;
-
-        if (isDev === "true") {
-          valueVes = 55.0 + bsExtra;
-          valueCop = 4274.99 - copExtra;
-          console.log("DATA:", valueVes, valueCop);
+        const is_custom_rate = user.userSettings?.is_custom_rate;
+        if (is_custom_rate === 1) {
+          const customRates = await fetchCustomRate(user.id);
+          valueVes = customRates.usd_to_bolivares;
+          valueCop = customRates.usd_to_pesos;
+          valueUsd = customRates.usd;
         } else {
           const { data } = await axios.get("/api/prices");
-          console.log("DATA:", data);
-          valueVes = data.priceVES;
-          valueCop = data.priceCOP;
-        }
-        let dataVes = valueVes;
-
-        let precioVes = parseFloat(valueVes);
-        let precioCop = parseFloat(valueCop);
-
-        if (!isNaN(precioVes) && !isNaN(precioCop)) {
-          let suma = precioVes + bsExtra;
-          let resta = precioCop - copExtra;
-          dispatch(setBinanceVES(suma));
-          dispatch(setBinanceCOP(precioCop));
-        } else {
-          console.error("Invalid price data:", dataVes.price);
+          valueVes = data.priceVES + bsExtra;
+          valueCop = data.priceCOP - copExtra;
         }
       } catch (error) {
-        console.error("Error fetching price:", error);
+        // console.error("Error fetching data from /api/prices:", error.message);
+        // Valores por defecto
+        valueVes = 55.0 + bsExtra;
+        valueCop = 4274.99 - copExtra;
+      }
+
+      let precioVes = parseFloat(valueVes);
+      let precioCop = parseFloat(valueCop);
+      let precioUsd = parseFloat(valueUsd);
+
+      if (!isNaN(precioVes) && !isNaN(precioCop) && !isNaN(precioUsd)) {
+        console.log("DATAS: ", precioVes, precioCop, precioUsd);
+
+        dispatch(setRateVES(precioVes));
+        dispatch(setRateCOP(precioCop));
+        dispatch(setRateUSD(precioUsd));
+      } else {
+        console.error("Invalid price data:", precioVes, precioCop, precioUsd);
       }
     };
 
@@ -53,7 +81,7 @@ const PriceFetcher = () => {
 
     // Limpia el intervalo cuando el componente se desmonte
     return () => clearInterval(interval);
-  }, [refreshPrice]);
+  }, [refreshPrice, user]);
 
   return <></>;
 };

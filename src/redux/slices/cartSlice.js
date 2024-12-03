@@ -8,8 +8,9 @@ const initialState = {
     pesos: 0.0,
     dolares: 0.0,
   },
-  binanceVES: 0,
-  binanceCOP: 0,
+  rateVES: 0,
+  rateCOP: 0,
+  rateUSD: 0,
   visible: false,
   pulse: false,
 };
@@ -57,12 +58,9 @@ export const cartSlice = createSlice({
 
       state.totales = calculateTotals(
         state.products,
-        {
-          bolivarRate: 35.5,
-          pesoRate: 4000,
-        },
-        state.binanceVES,
-        state.binanceCOP
+        state.rateVES,
+        state.rateCOP,
+        state.rateUSD
       );
     },
     additionCartItem: (state, action) => {
@@ -78,12 +76,9 @@ export const cartSlice = createSlice({
       }
       state.totales = calculateTotals(
         state.products,
-        {
-          bolivarRate: 35.5,
-          pesoRate: 4000,
-        },
-        state.binanceVES,
-        state.binanceCOP
+        state.rateVES,
+        state.rateCOP,
+        state.rateUSD
       );
     },
     subtractCartItem: (state, action) => {
@@ -100,19 +95,37 @@ export const cartSlice = createSlice({
       }
       state.totales = calculateTotals(
         state.products,
-        {
-          bolivarRate: 35.5,
-          pesoRate: 4000,
-        },
-        state.binanceVES,
-        state.binanceCOP
+        state.rateVES,
+        state.rateCOP,
+        state.rateUSD
       );
     },
-    setBinanceVES: (state, action) => {
-      state.binanceVES = action.payload;
+    setRateVES: (state, action) => {
+      state.rateVES = action.payload;
     },
-    setBinanceCOP: (state, action) => {
-      state.binanceCOP = action.payload;
+    setRateCOP: (state, action) => {
+      state.rateCOP = action.payload;
+    },
+    setRateUSD: (state, action) => {
+      state.rateUSD = action.payload;
+    },
+    getActualCart: (state, action) => {
+      if (action.payload && action.payload.length > 0) {
+        state.products = action.payload;
+      }
+    },
+    getActualTotals: (state, action) => {
+      if (action.payload && action.payload.length > 0) {
+        state.totales = calculateTotals(
+          state.products,
+          state.rateVES,
+          state.rateCOP,
+          state.rateUSD
+        );
+      }
+    },
+    clearCart: (state) => {
+      state.products = []; // Limpia el estado de Redux
     },
     deleteCartItem: (state, action) => {
       const existingProductIndex = state.products.findIndex(
@@ -123,12 +136,9 @@ export const cartSlice = createSlice({
       }
       state.totales = calculateTotals(
         state.products,
-        {
-          bolivarRate: 35.5,
-          pesoRate: 4000,
-        },
-        state.binanceVES,
-        state.binanceCOP
+        state.rateVES,
+        state.rateCOP,
+        state.rateUSD
       );
     },
   },
@@ -140,8 +150,12 @@ export const {
   setPulseCart,
   additionCartItem,
   subtractCartItem,
-  setBinanceVES,
-  setBinanceCOP,
+  setRateVES,
+  setRateCOP,
+  setRateUSD,
+  getActualCart,
+  getActualTotals,
+  clearCart,
   deleteCartItem,
 } = cartSlice.actions;
 export default cartSlice.reducer;

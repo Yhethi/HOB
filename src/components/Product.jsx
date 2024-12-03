@@ -59,18 +59,20 @@ export const Product = ({ product }) => {
     <motion.div
       className="card__product"
       layout
-      initial={{ opacity: 0, y: 3 }}
+      initial={{ opacity: 1, y: 3 }}
       animate={{ opacity: 1, y: 3 }}
-      exit={{ opacity: 0, y: -3 }}
-      transition={{ duration: 0.3, linear: true }}
+      exit={{ opacity: 1, y: -3 }}
+      transition={{ duration: 0.1, linear: true }}
     >
       <div className="card__product__internal">
         <div className="card_image">
           <img
-            // src={product.imagen_url}
-            src="https://images-na.ssl-images-amazon.com/images/I/41hbmiP+77L._AC_UL450_SR450,320_.jpg"
+            src={product.imagen_url}
+            // src="https://images-na.ssl-images-amazon.com/images/I/41hbmiP+77L._AC_UL450_SR450,320_.jpg"
             alt={product.descripcion}
-            onClick={handleImageClick}
+            onClick={() => {
+              handleToCart(product.id, cantidad);
+            }}
           />
         </div>
         <div className="card__product__data">

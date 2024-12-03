@@ -29,12 +29,13 @@ import HomeIcon from "@mui/icons-material/Home";
 import { getProductFilter } from "../redux/slices/productsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { getDarkMode } from "../js/changeColor";
-import { setShowCart } from "../redux/slices/cartSlice";
+import { clearCart, setShowCart } from "../redux/slices/cartSlice";
 import { toggleSidebar } from "../redux/slices/sidebarSlice";
 import { Sidebar } from "./Sidebar";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../assets/hooks/useAuth";
 import { logoutUser } from "../redux/slices/authSlice";
+import { setIsLoading } from "../redux/slices/loaderSlice";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -82,22 +83,31 @@ export const Header = () => {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-  const [isDarkMode, setIsDarkMode] = useState(true); // Empieza en modo oscuro
   const isPulsing = useSelector((state) => state.cart.pulse);
-  // Redux
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const togglePrimaryColor = () => {
-    getDarkMode(isDarkMode);
-    setIsDarkMode(!isDarkMode); // Cambia entre los temas claro y oscuro
-  };
-  useEffect(() => {
-    togglePrimaryColor();
-  }, []);
 
   const showCart = useSelector((state) => state.cart.visible);
   const getSidebarStatus = useSelector((state) => state.sidebar.isOpen);
   const totalItems = useSelector((state) => state.cart.products.length);
+
+  // Redux
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [isDarkMode, setIsDarkMode] = useState(
+    JSON.parse(localStorage.getItem("isDarkMode")) || false
+  );
+
+  const togglePrimaryColor = () => {
+    const newTheme = !isDarkMode;
+    getDarkMode(isDarkMode);
+    setIsDarkMode(newTheme);
+    localStorage.setItem("isDarkMode", JSON.stringify(newTheme));
+  };
+
+  useEffect(() => {
+    getDarkMode(!isDarkMode);
+  }, []);
+
   const toggleShowCart = () => {
     dispatch(setShowCart(!showCart));
   };
@@ -129,6 +139,18 @@ export const Header = () => {
 
   const handleGoTo = (url) => {
     navigate(url);
+  };
+
+  const handleLogout = () => {
+    dispatch(setIsLoading(true));
+    dispatch(logoutUser());
+    dispatch(clearCart());
+    localStorage.setItem("cartItems", JSON.stringify([]));
+    handleGoTo("/");
+    setTimeout(() => {
+      dispatch(setIsLoading(false));
+      document.body.click();
+    }, 400);
   };
 
   const isLogged = useAuth();
@@ -164,6 +186,15 @@ export const Header = () => {
           Iniciar Sesion
         </MenuItem>
       )}
+      {!isLogged && (
+        <MenuItem
+          onClick={() => {
+            handleGoTo("/register");
+          }}
+        >
+          Registrarse
+        </MenuItem>
+      )}
       {isLogged && (
         <MenuItem
           onClick={() => {
@@ -173,23 +204,7 @@ export const Header = () => {
           My account
         </MenuItem>
       )}
-      {isLogged && (
-        <MenuItem
-          onClick={() => {
-            dispatch(logoutUser());
-            handleGoTo("/");
-          }}
-        >
-          Cerrar Sesion
-        </MenuItem>
-      )}
-      {/* <MenuItem
-        onClick={() => {
-          handleGoTo("/register");
-        }}
-      >
-        Registrarse
-      </MenuItem> */}
+      {isLogged && <MenuItem onClick={handleLogout}>Cerrar Sesión</MenuItem>}
       {/* <MenuItem
         onClick={() => {
           handleGoTo("/perfil/1");
@@ -222,23 +237,23 @@ export const Header = () => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
+      {/* <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="error">
             <MailIcon />
           </Badge>
         </IconButton>
         <p>Messages</p>
-      </MenuItem>
-      <MenuItem onClick={togglePrimaryColor}>
+      </MenuItem> */}
+      {/* <MenuItem onClick={togglePrimaryColor}>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={isDarkMode ? "on" : "off"} color="error">
             <DarkModeIcon />
           </Badge>
         </IconButton>
         <p>Modo Oscuro</p>
-      </MenuItem>
-      <MenuItem>
+      </MenuItem> */}
+      {/* <MenuItem>
         <IconButton
           size="large"
           aria-label="show 17 new notifications"
@@ -249,7 +264,7 @@ export const Header = () => {
           </Badge>
         </IconButton>
         <p>Notifications</p>
-      </MenuItem>
+      </MenuItem> */}
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -342,7 +357,7 @@ export const Header = () => {
                     <DarkModeIcon />
                   </Badge>
                 </IconButton>
-                <IconButton
+                {/* <IconButton
                   size="large"
                   aria-label="show 4 new mails"
                   color="inherit"
@@ -359,7 +374,7 @@ export const Header = () => {
                   <Badge badgeContent={17} color="error">
                     <NotificationsIcon />
                   </Badge>
-                </IconButton>
+                </IconButton> */}
                 <IconButton
                   size="large"
                   aria-label="show 4 new mails"
@@ -393,6 +408,16 @@ export const Header = () => {
                 >
                   <Badge badgeContent={totalItems} color="error">
                     <ShoppingCartIcon />
+                  </Badge>
+                </IconButton>
+                <IconButton
+                  size="large"
+                  aria-label="show 4 new mails"
+                  color="inherit"
+                  onClick={togglePrimaryColor}
+                >
+                  <Badge badgeContent={isDarkMode ? "on" : "off"} color="error">
+                    <DarkModeIcon />
                   </Badge>
                 </IconButton>
                 <IconButton

@@ -13,6 +13,7 @@ import { testProducts } from "./test/listProducts";
 import { Sidebar } from "./components/Sidebar";
 import { UserProfile } from "./components/UserProfile";
 import PriceFetcher from "./components/tools/PriceFetcher";
+import Loader from "./components/tools/Loader";
 
 function App() {
   const [codigo_barras, setCodigo_barras] = useState("0");
@@ -29,7 +30,7 @@ function App() {
       console.error("faltan datos");
       return;
     }
-    console.log(nombre, descripcion);
+    // console.log(nombre, descripcion);
 
     if (nombre && descripcion) {
       axios
@@ -39,7 +40,7 @@ function App() {
           descripcion,
         })
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           setProductos([...productos, response.data]);
           setNombre("");
           setDescripcion("");
@@ -55,6 +56,7 @@ function App() {
 
   return (
     <div className="global__container">
+      <Loader />
       <BackgroundAnimated />
       <Header />
       <Products />

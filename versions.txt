@@ -78,3 +78,16 @@
 
 1.057
 - Estilos al cart mas optimos
+
+1.06
+- Mega actualizacion:
+- Nuevo estilo de inicio de sesion y registro
+- Productos vuelven a cargarse al entrar a la pagina principal
+- Mantener modo oscuro
+- Animación del botón
+- Guardar el carrito en la sesión
+- Totales del carrito no se inician al reiniciar la pagina
+- El carrito se actualiza si se inicia sesion, se registra, o si cierra sesion
+- Boton vaciar carrito
+- Test de facturacion con un alert
+- Boton registrarse

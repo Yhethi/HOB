@@ -5,19 +5,22 @@ import CloseIcon from "@mui/icons-material/Close";
 import {
   addCartItem,
   additionCartItem,
+  clearCart,
   deleteCartItem,
+  getActualCart,
+  getActualTotals,
   setShowCart,
   subtractCartItem,
 } from "../redux/slices/cartSlice";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { TbShoppingCart } from "react-icons/tb";
 import AnimatedButton from "./tools/AnimatedButton";
+import { FinalizarCompra } from "./tools/FinalizarCompra";
 
 export const Cart = () => {
   const showCart = useSelector((state) => state.cart.visible);
   const dispatch = useDispatch();
   const cartContainerRef = useRef(null);
-  const [cantidad, setCantidad] = useState(0);
 
   useEffect(() => {
     if (cartContainerRef.current) {
@@ -38,17 +41,23 @@ export const Cart = () => {
       }
       setPrevWidth(currentWidth);
     };
-
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, [dispatch, prevWidth]);
 
+  useEffect(() => {
+    if (prevWidth < 768) {
+      dispatch(setShowCart(false));
+    } else {
+      dispatch(setShowCart(true));
+    }
+  }, []);
+
   const toggleShowCart = () => {
     dispatch(setShowCart(!showCart));
   };
-  const cartItems = useSelector((state) => state.cart.products);
   const totales = useSelector((state) => state.cart.totales);
   const handleDeleteItem = (id) => {
     dispatch(deleteCartItem(id));
@@ -67,7 +76,6 @@ export const Cart = () => {
     } else if (element && type == "noAdd" && element.cantidad >= 1) {
       dispatch(subtractCartItem({ ...element, cantidad: 1 }));
     }
-    console.log(totales);
   };
 
   const handleInputChange = (e, id) => {
@@ -95,10 +103,25 @@ export const Cart = () => {
       );
     }
   };
+  const cartItems = useSelector((state) => state.cart.products); // Asegúrate de usar el nombre correcto del estado
 
   useEffect(() => {
-    console.log("Estado del carrito:", cartItems);
+    const savedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+    dispatch(getActualCart(savedCartItems));
+    setTimeout(() => {
+      dispatch(getActualTotals(savedCartItems));
+    }, 100);
+  }, [dispatch]);
+
+  useEffect(() => {
+    // console.log("Guardando carrito en localStorage: ", cartItems);
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
+
+  const handleEmptyCart = () => {
+    dispatch(clearCart());
+    localStorage.setItem("cartItems", JSON.stringify([]));
+  };
 
   return (
     <div className="cart__global" ref={cartContainerRef}>
@@ -167,7 +190,6 @@ export const Cart = () => {
                           </button>
                         </div>
                       </div>
-                      {/* <div className="cart__barcode">#: {item.codigo_barras}</div> */}
                     </div>
                   </div>
                 </div>
@@ -176,11 +198,26 @@ export const Cart = () => {
           </div>
           <div className="contenedor__totales">
             <div className="totales">
-              <span>BS.{totales.bolivares.toFixed(2)}</span>
-              <span>Cop {Math.ceil(totales.pesos / 100) * 100}</span>
-              <span>$ {totales.dolares.toFixed(2)}</span>
+              <span className="flex__vaciar__button">
+                <button className="vaciar__button" onClick={handleEmptyCart}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24px"
+                    viewBox="0 -960 960 960"
+                    width="24px"
+                  >
+                    <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                  </svg>
+                  <span>Vaciar Carrito</span>
+                </button>
+                Bs.
+                {totales.bolivares.toFixed(2)}
+              </span>
+              <span>Cop. {Math.ceil(totales.pesos / 100) * 100}</span>
+              <span>$. {totales.dolares.toFixed(2)}</span>
             </div>
-            <AnimatedButton />
+            {/* <AnimatedButton /> */}
+            <FinalizarCompra />
           </div>
         </div>
       )}

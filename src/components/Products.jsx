@@ -16,6 +16,7 @@ import { useRef } from "react";
 import { setProducts } from "../redux/slices/productsSlice";
 import { store } from "../redux/store";
 import { testProducts } from "../test/listProducts";
+import { setIsLoading } from "../redux/slices/loaderSlice";
 
 export const Products = () => {
   // Redux
@@ -27,13 +28,25 @@ export const Products = () => {
   const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
+    dispatch(setIsLoading(true));
     if (user) {
-      fetch(`/api/productos?userId=${user.id}`)
-        .then((response) => response.json())
-        .then((data) => dispatch(setProducts(data)))
-        .catch((error) => console.error("Error fetching productos:", error));
+      try {
+        fetch(`/api/productos?userId=${user.id}`)
+          .then((response) => response.json())
+          .then((data) => dispatch(setProducts(data)))
+          .catch((error) => console.error("Error fetching productos:", error));
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setTimeout(() => {
+          dispatch(setIsLoading(false));
+        }, 500);
+      }
     } else {
       dispatch(setProducts(testProducts));
+      setTimeout(() => {
+        dispatch(setIsLoading(false));
+      }, 500);
     }
   }, [user, dispatch]);
   const [prevWidth, setPrevWidth] = useState(window.innerWidth);

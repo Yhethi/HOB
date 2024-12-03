@@ -48,6 +48,29 @@ app.get("/api/productos", async (req, res) => {
   }
 });
 
+app.get("/api/customRate", async (req, res) => {
+  try {
+    const { userId } = req.query;
+    if (!userId) {
+      return res
+        .status(400)
+        .json({ error: "El id del usuario es obligatorio" });
+    }
+
+    const connection = await mysql.createConnection(dbConfig);
+    const [results] = await connection.execute(
+      "SELECT * FROM exchangerates WHERE user_id = ?",
+      [userId]
+    );
+
+    res.json(results);
+    await connection.end();
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("Error al obtener el los custom rates");
+  }
+});
+
 // Ruta para insertar un nuevo producto
 app.post("/api/productos", async (req, res) => {
   const { codigo_barras, nombre, descripcion } = req.body;
@@ -97,9 +120,20 @@ app.post("/api/login", async (req, res) => {
         .json({ success: false, error: "Usuario o contraseña incorrectos" });
     }
 
+    const [resultsSettings] = await connection.execute(
+      "SELECT * FROM user_settings WHERE user_id = ?",
+      [user.id]
+    );
+    const userSettings = resultsSettings[0];
+
     // Generar el token con los datos del usuario
     const token = jwt.sign(
-      { id: user.id, email: user.email, nombre: user.nombre }, // Datos incluidos en el token
+      {
+        id: user.id,
+        email: user.email,
+        nombre: user.nombre,
+        userSettings,
+      }, // Datos incluidos en el token
       SECRET_KEY,
       { expiresIn: "1h" }
     );
@@ -107,7 +141,12 @@ app.post("/api/login", async (req, res) => {
     res.json({
       success: true,
       token,
-      user: { id: user.id, email: user.email, nombre: user.nombre }, // Retornar también el usuario al cliente
+      user: {
+        id: user.id,
+        email: user.email,
+        nombre: user.nombre,
+        userSettings,
+      }, // Retornar también el usuario al cliente
     });
 
     await connection.end();
@@ -118,10 +157,10 @@ app.post("/api/login", async (req, res) => {
 });
 
 app.post("/api/register", async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, lastName, email, password } = req.body;
 
   try {
-    console.log("Datos recibidos:", { name, email, password });
+    console.log("Datos recibidos:", { name, lastName, email, password });
 
     const connection = await mysql.createConnection(dbConfig);
     console.log("Conexión a la base de datos establecida.");
@@ -147,7 +186,8 @@ app.post("/api/register", async (req, res) => {
       INSERT INTO usuarios (nombre, email, password, created_at)
       VALUES (?, ?, ?, NOW())
     `;
-    await connection.execute(query, [name, email, hashedPassword]);
+    const fullName = name + " " + lastName;
+    await connection.execute(query, [fullName, email, hashedPassword]);
     console.log("Usuario registrado en la base de datos.");
 
     await connection.end();
