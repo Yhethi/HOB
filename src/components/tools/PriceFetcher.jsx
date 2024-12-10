@@ -23,7 +23,7 @@ const PriceFetcher = () => {
         params: { userId },
       });
 
-      return response.data; 
+      return response.data;
     } catch (error) {
       console.error(
         "Error al obtener los custom rates:",
@@ -34,6 +34,7 @@ const PriceFetcher = () => {
   }
 
   useEffect(() => {
+    let interval;
     const fetchPrice = async () => {
       let valueVes;
       let valueCop;
@@ -42,17 +43,16 @@ const PriceFetcher = () => {
         const is_custom_rate = user.userSettings?.is_custom_rate;
         if (is_custom_rate === 1) {
           const customRates = await fetchCustomRate(user.id);
+
           valueVes = customRates.usd_to_bolivares;
           valueCop = customRates.usd_to_pesos;
           valueUsd = customRates.usd;
-        } else {
+        } else if (is_custom_rate === 0) {
           const { data } = await axios.get("/api/prices");
           valueVes = data.priceVES + bsExtra;
           valueCop = data.priceCOP - copExtra;
         }
       } catch (error) {
-        // console.error("Error fetching data from /api/prices:", error.message);
-        // Valores por defecto
         valueVes = 55.0 + bsExtra;
         valueCop = 4274.99 - copExtra;
       }
@@ -74,12 +74,12 @@ const PriceFetcher = () => {
 
     fetchPrice();
 
-    // Opcional: Actualiza el precio cada 10 segundos
-    const interval = setInterval(() => {
-      setRefreshPrice((prev) => !prev);
+    interval = setInterval(() => {
+      if (user.userSettings?.is_custom_rate === 0) {
+        setRefreshPrice((prev) => !prev);
+      }
     }, 10000);
 
-    // Limpia el intervalo cuando el componente se desmonte
     return () => clearInterval(interval);
   }, [refreshPrice, user]);
 

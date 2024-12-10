@@ -1,8 +1,8 @@
 export const calculateTotals = (products, rateVES, rateCOP) => {
   const totals = products.reduce(
     (acc, item) => {
-      const subtotalDolares = (item.precio * item.cantidad) / rateCOP;
-      const subtotalCop = item.precio * item.cantidad;
+      const subtotalDolares = item.precio * item.cantidad;
+      const subtotalCop = item.precio * item.cantidad * rateCOP;
       const subtotalVES = subtotalDolares * rateVES;
       acc.dolares += subtotalDolares;
       acc.bolivares += subtotalVES;

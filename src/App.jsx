@@ -14,6 +14,8 @@ import { Sidebar } from "./components/Sidebar";
 import { UserProfile } from "./components/UserProfile";
 import PriceFetcher from "./components/tools/PriceFetcher";
 import Loader from "./components/tools/Loader";
+import { fetchUserData } from "./redux/actions/fetchUserData";
+import { setIsLoading } from "./redux/slices/loaderSlice";
 
 function App() {
   const [codigo_barras, setCodigo_barras] = useState("0");
@@ -53,6 +55,10 @@ function App() {
       console.error("Nombre y descripción son requeridos");
     }
   };
+
+  useEffect(() => {
+    dispatch(fetchUserData());
+  }, []);
 
   return (
     <div className="global__container">

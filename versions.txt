@@ -95,3 +95,8 @@
 1.061
 - Boton vaciar carrito y su flex acomodado
 - Cuando se le da al search y el carrito está activo, este se cerrará
+
+1.062
+- Tasas modificables añadidas
+- Cards en UserProfile
+- AutoRefresh de la data cuando se hace algun cambio

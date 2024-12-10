@@ -3547,6 +3547,11 @@ sass-embedded@^1.79.4:
     sass-embedded-win32-ia32 "1.80.5"
     sass-embedded-win32-x64 "1.80.5"
 
+sass-migrator@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/sass-migrator/-/sass-migrator-2.2.1.tgz#803a3d534f804eb5c8ab9a0c05a4b7a9b1c267e8"
+  integrity sha512-Sa2sVC2MeL4cVcEPpd8z/R5/c8LOA0B6K39IGrJl/8WQ24lI1tLF4P8WcQJSCt/lDmJCyOmFGZTC3Rf7/6tVfQ==
+
 scheduler@^0.23.2:
   version "0.23.2"
   resolved "https://registry.npmjs.org/scheduler/-/scheduler-0.23.2.tgz"

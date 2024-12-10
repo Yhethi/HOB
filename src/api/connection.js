@@ -63,7 +63,7 @@ app.get("/api/customRate", async (req, res) => {
       [userId]
     );
 
-    res.json(results);
+    res.json(results[0]);
     await connection.end();
   } catch (e) {
     console.log(e);
@@ -126,6 +126,13 @@ app.post("/api/login", async (req, res) => {
     );
     const userSettings = resultsSettings[0];
 
+    const [resultsCustomRate] = await connection.execute(
+      "SELECT usd,usd_to_bolivares,usd_to_pesos FROM exchangerates WHERE user_id = ?",
+      [user.id]
+    );
+
+    const customRates = resultsCustomRate[0] || null;
+
     // Generar el token con los datos del usuario
     const token = jwt.sign(
       {
@@ -133,7 +140,8 @@ app.post("/api/login", async (req, res) => {
         email: user.email,
         nombre: user.nombre,
         userSettings,
-      }, // Datos incluidos en el token
+        customRates,
+      },
       SECRET_KEY,
       { expiresIn: "1h" }
     );
@@ -146,7 +154,8 @@ app.post("/api/login", async (req, res) => {
         email: user.email,
         nombre: user.nombre,
         userSettings,
-      }, // Retornar también el usuario al cliente
+        customRates,
+      },
     });
 
     await connection.end();
@@ -200,6 +209,61 @@ app.post("/api/register", async (req, res) => {
   }
 });
 
+app.patch("/api/updateCustomRate", async (req, res) => {
+  const { user_id, usd_to_bolivares, usd_to_pesos, usd } = req.body;
+  console.log("req.body:", req.body);
+
+  try {
+    const connection = await mysql.createConnection(dbConfig);
+    const query = `
+    UPDATE exchangerates
+    SET 
+      usd_to_bolivares = ?, 
+      usd_to_pesos = ?, 
+      usd = ?, 
+      updated_at = NOW()
+    WHERE user_id = ?
+  `;
+    await connection.execute(query, [
+      usd_to_bolivares,
+      usd_to_pesos,
+      usd,
+      user_id,
+    ]);
+    await connection.end();
+    res.status(201).json({
+      success: true,
+      message: "Tus tasas se han actualizado correctamente.",
+    });
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+app.patch("/api/updateCustomRateCheckBox", async (req, res) => {
+  const { isCustomRate, user_id } = req.body;
+  const value = isCustomRate ? 1 : 0;
+  try {
+    const connection = await mysql.createConnection(dbConfig);
+    const query = `
+    UPDATE user_settings
+    SET 
+      is_custom_rate = ?
+    WHERE user_id = ?
+  `;
+    console.log(value, user_id);
+
+    await connection.execute(query, [value, user_id]);
+    await connection.end();
+    res.status(201).json({
+      success: true,
+      message: "Tu opcion a cambiado a: " + value,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+});
+
 app.post("/api/validate-token", (req, res) => {
   const { token } = req.body;
 
@@ -216,6 +280,76 @@ app.post("/api/validate-token", (req, res) => {
     return res
       .status(401)
       .json({ success: false, message: "Token inválido o expirado" });
+  }
+});
+
+app.get("/api/userData", async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1]; // Obtén el token del header
+
+  if (!token) {
+    return res
+      .status(401)
+      .json({ success: false, message: "Token no proporcionado." });
+  }
+
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const userId = decoded.id;
+    const connection = await mysql.createConnection(dbConfig);
+
+    const [userRows] = await connection.execute(
+      `SELECT id, email, nombre FROM usuarios WHERE id = ?`,
+      [userId]
+    );
+
+    if (userRows.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Usuario no encontrado." });
+    }
+
+    const [customRatesRows] = await connection.execute(
+      `SELECT usd_to_bolivares, usd_to_pesos, usd FROM exchangerates WHERE user_id = ?`,
+      [userId]
+    );
+
+    const [resultsSettings] = await connection.execute(
+      "SELECT * FROM user_settings WHERE user_id = ?",
+      [userId]
+    );
+
+    const userSettings = resultsSettings[0];
+    const customRates = customRatesRows[0] || {};
+    const user = userRows[0];
+
+    await connection.end();
+
+    const newToken = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+        nombre: user.nombre,
+        customRates,
+        userSettings,
+      },
+      SECRET_KEY,
+      { expiresIn: "1h" }
+    );
+
+    res.json({
+      success: true,
+      token: newToken,
+      user: {
+        ...user,
+        customRates,
+        userSettings,
+      },
+    });
+  } catch (error) {
+    console.error("Error al procesar la solicitud:", error.message);
+    res
+      .status(500)
+      .json({ success: false, message: "Error al obtener datos del usuario." });
   }
 });
 
