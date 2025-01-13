@@ -102,3 +102,5 @@
 - AutoRefresh de la data cuando se hace algun cambio.
 
 1.07
+- Carpetas ordenadas.
+- Titulo cambiado.
