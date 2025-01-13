@@ -18,7 +18,7 @@ import { store } from "../redux/store";
 import { testProducts } from "../test/listProducts";
 import { setIsLoading } from "../redux/slices/loaderSlice";
 
-export const Products = () => {
+export const Products = ({ userToGet }) => {
   // Redux
   const dispatch = useDispatch();
   const allProducts = useSelector((state) => state.products.products);
@@ -31,10 +31,21 @@ export const Products = () => {
     dispatch(setIsLoading(true));
     if (user) {
       try {
-        fetch(`/api/productos?userId=${user.id}`)
-          .then((response) => response.json())
-          .then((data) => dispatch(setProducts(data)))
-          .catch((error) => console.error("Error fetching productos:", error));
+        if (userToGet) {
+          fetch(`/api/productos?userId=${userToGet}`)
+            .then((response) => response.json())
+            .then((data) => dispatch(setProducts(data)))
+            .catch((error) =>
+              console.error("Error fetching productos:", error)
+            );
+        } else {
+          fetch(`/api/productos?userId=${user.id}`)
+            .then((response) => response.json())
+            .then((data) => dispatch(setProducts(data)))
+            .catch((error) =>
+              console.error("Error fetching productos:", error)
+            );
+        }
       } catch (e) {
         console.log(e);
       } finally {

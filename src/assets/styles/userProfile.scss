@@ -4,7 +4,7 @@
   padding-top: 64px;
   .up_profile {
     display: flex;
-    background: grey;
+    background: $bg-card-product;
     padding: 10px;
 
     @media (max-width: 800px) {
@@ -44,7 +44,7 @@
         p {
           width: 70%;
           height: 100%;
-          color: $text-dark-mode;
+          color: white;
           font-size: clamp(1.5rem, 2.5vw, 2.5rem);
           display: grid;
           place-content: center;
@@ -53,13 +53,30 @@
         svg {
           width: 50%;
           height: 50%;
-          fill: $text-dark-mode;
+          fill: white;
+        }
+        span {
+          width: 50%;
+          height: 50%;
+          color: white;
+          display: grid;
+          place-content: center;
+          font-size: 44px;
+          padding: 0;
+          margin: 0;
         }
       }
-
+      .card {
+        background: black;
+      }
       &.cards_up_left {
         .card:nth-child(1) {
           background: green;
+        }
+      }
+      &.cards_up_right {
+        .card:nth-child(1) {
+          background: rgb(196, 0, 0);
         }
       }
     }

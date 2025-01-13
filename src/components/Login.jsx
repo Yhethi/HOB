@@ -3,7 +3,6 @@ import "../assets/styles/login.scss";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../assets/hooks/useAuth";
 import { loginUser, logoutUser } from "../redux/slices/authSlice";
 import { setProducts } from "../redux/slices/productsSlice";
 import { setIsLoading } from "../redux/slices/loaderSlice";
@@ -22,7 +21,7 @@ export const Login = () => {
   const handleLogin = async () => {
     dispatch(setIsLoading(true));
     try {
-      const response = await axios.post("/api/login", { email, password });
+      const response = await axios.post("/api/auth/login", { email, password });
       localStorage.setItem("authToken", response.data.token);
 
       if (response.data.success) {

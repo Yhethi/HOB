@@ -2,6 +2,7 @@ import React from "react";
 import "../../assets/styles/tools/FinalizarCompra.scss";
 import { clearCart } from "../../redux/slices/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
+import socket from "../../../socket";
 
 export const FinalizarCompra = () => {
   const dispatch = useDispatch();
@@ -12,6 +13,14 @@ export const FinalizarCompra = () => {
     const productNames = cartItems.map(
       (item) => `${item.nombre} x${item.cantidad}`
     );
+
+    // Enviar evento al servidor
+    socket.emit("finalizarCompra", {
+      buyerId: 3, // ID del comprador
+      cartProducts: productNames,
+      totals: totales,
+    });
+
     alert(
       `----Gracias por tu compra----\nHas adquirido:\n${productNames.join(
         ",\n"

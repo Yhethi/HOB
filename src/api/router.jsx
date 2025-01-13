@@ -6,6 +6,7 @@ import { UserProfile } from "../components/UserProfile.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import PrivateRoute from "../components/PrivateRoute.jsx";
 import Register from "../components/Register.jsx";
+import Tienda from "../components/Tienda.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -15,6 +16,11 @@ export const router = createBrowserRouter([
   {
     path: "/login",
     element: <PrivateRoute />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/tienda/:id_del_usuario",
+    element: <Tienda />,
     errorElement: <ErrorPage />,
   },
   {

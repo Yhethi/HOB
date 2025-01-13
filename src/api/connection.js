@@ -21,32 +21,79 @@ const dbConfig = {
 };
 
 const port = 3001;
+const port2 = 3002;
+import http from "http";
+import { getProducts } from "./controllers.js";
+import { Server } from "socket.io";
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
 
-// Middleware para parsear JSON
 app.use(express.json());
 
-app.get("/api/productos", async (req, res) => {
-  try {
-    const { userId } = req.query;
+const users = {};
 
-    if (!userId) {
-      return res
-        .status(400)
-        .json({ error: "El id del usuario es obligatorio" });
+io.on("connection", (socket) => {
+  console.log("Usuario conectado:", socket.id);
+
+  // Registrar un usuario con su ID
+  socket.on("registerUser", (userId) => {
+    users[userId] = socket.id;
+    console.log(`Usuario ${userId} registrado con el socket ${socket.id}`);
+  });
+
+  // Escuchar el evento de compra finalizada
+  socket.on("finalizarCompra", (data) => {
+    const { buyerId, cartProducts, totals } = data;
+
+    // Enviar la notificación al usuario con ID 2
+    const targetUserId = 5;
+    const targetSocketId = users[targetUserId];
+    console.log("usuarios: ", users, targetSocketId);
+
+    if (targetSocketId) {
+      io.to(targetSocketId).emit("newNotification", {
+        message: `Usuario ${buyerId} ha realizado una compra:\n${cartProducts.join(
+          ", "
+        )}\nTotales:\nBs. ${totals.bolivares.toFixed(2)}, Cop ${
+          Math.ceil(totals.pesos / 100) * 100
+        }, $ ${totals.dolares.toFixed(2)}`,
+      });
     }
+  });
 
-    const connection = await mysql.createConnection(dbConfig);
-    const [results] = await connection.execute(
-      "SELECT productos.*, inventario.cantidad FROM productos LEFT JOIN inventario ON productos.id = inventario.producto_id WHERE productos.usuario_id = ?",
-      [userId]
-    );
-    res.json(results);
-    await connection.end();
-  } catch (err) {
-    console.error("Error al obtener productos:", err);
-    res.status(500).send("Error al obtener productos");
-  }
+  // Limpiar cuando el usuario se desconecta
+  socket.on("disconnect", () => {
+    for (const userId in users) {
+      if (users[userId] === socket.id) {
+        delete users[userId];
+        break;
+      }
+    }
+    console.log("Usuario desconectado:", socket.id);
+  });
 });
+
+io.on("connection", (socket) => {
+  console.log("Cliente conectado:", socket.id);
+
+  socket.on("testNotification", (data) => {
+    console.log("Notificación recibida del cliente:", data);
+
+    io.emit("newNotification", { message: "Notificación de prueba" });
+  });
+  socket.on("disconnect", () => {
+    console.log("Cliente desconectado:", socket.id);
+  });
+});
+console.log("getProducts:", getProducts);
+
+app.get("/api/productos", getProducts);
 
 app.get("/api/customRate", async (req, res) => {
   try {
@@ -71,7 +118,35 @@ app.get("/api/customRate", async (req, res) => {
   }
 });
 
-// Ruta para insertar un nuevo producto
+app.get("/api/tienda/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const connection = await mysql.createConnection(dbConfig);
+    const [vendedor] = await connection.execute(
+      "SELECT * FROM usuarios WHERE id = ? AND u_nivel = 2",
+      [id]
+    );
+
+    if (vendedor.length === 0) {
+      return res
+        .status(404)
+        .json({ error: "El vendedor no existe o no tiene permisos." });
+    }
+    const [productos] = await connection.execute(
+      "SELECT * FROM productos WHERE user_id = ?",
+      [id]
+    );
+
+    await connection.end();
+
+    res.status(200).json(productos);
+  } catch (err) {
+    console.error("Error al obtener productos:", err);
+    res.status(500).json({ error: "Error interno del servidor." });
+  }
+});
+
 app.post("/api/productos", async (req, res) => {
   const { codigo_barras, nombre, descripcion } = req.body;
   try {
@@ -139,6 +214,7 @@ app.post("/api/login", async (req, res) => {
         id: user.id,
         email: user.email,
         nombre: user.nombre,
+        u_nivel: user.u_nivel,
         userSettings,
         customRates,
       },
@@ -153,6 +229,7 @@ app.post("/api/login", async (req, res) => {
         id: user.id,
         email: user.email,
         nombre: user.nombre,
+        u_nivel: user.u_nivel,
         userSettings,
         customRates,
       },
@@ -169,40 +246,64 @@ app.post("/api/register", async (req, res) => {
   const { name, lastName, email, password } = req.body;
 
   try {
-    console.log("Datos recibidos:", { name, lastName, email, password });
-
     const connection = await mysql.createConnection(dbConfig);
-    console.log("Conexión a la base de datos establecida.");
 
-    // Verificar si el correo ya existe
+    // Verificar si el email ya está registrado
     const [existingUser] = await connection.execute(
       "SELECT * FROM usuarios WHERE email = ?",
       [email]
     );
-    console.log("Consulta de usuario existente ejecutada:", existingUser);
 
     if (existingUser.length > 0) {
-      console.log("El correo ya está registrado.");
       return res.status(400).json({ error: "El correo ya está registrado" });
     }
 
-    // Encriptar la contraseña
+    // Hashear el password
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log("Contraseña encriptada:", hashedPassword);
 
-    // Insertar el nuevo usuario
-    const query = `
+    // Insertar en la tabla usuarios
+    const queryUsuario = `
       INSERT INTO usuarios (nombre, email, password, created_at)
       VALUES (?, ?, ?, NOW())
     `;
     const fullName = name + " " + lastName;
-    await connection.execute(query, [fullName, email, hashedPassword]);
-    console.log("Usuario registrado en la base de datos.");
 
+    // Insertar el usuario en la tabla
+    const [result] = await connection.execute(queryUsuario, [
+      fullName,
+      email,
+      hashedPassword,
+    ]);
+
+    // Obtener el ID del último usuario registrado
+    const userId = result.insertId;
+
+    // Insertar valores predeterminados en la tabla exchangerates
+    const queryExchangeRates = `
+      INSERT INTO exchangerates (user_id,updated_at)
+      VALUES (?, NOW())
+    `;
+    await connection.execute(queryExchangeRates, [userId]);
+
+    // Insertar valores predeterminados en la tabla user_settings
+    const queryUserSettings = `
+      INSERT INTO user_settings (user_id)
+      VALUES (?)
+    `;
+    await connection.execute(queryUserSettings, [userId]);
+
+    console.log(
+      "Usuario y configuraciones iniciales registrados en la base de datos."
+    );
+
+    // Cerrar la conexión
     await connection.end();
-    res
-      .status(201)
-      .json({ success: true, message: "Usuario registrado exitosamente" });
+
+    res.status(201).json({
+      success: true,
+      message: "Usuario registrado exitosamente",
+      userId,
+    });
   } catch (err) {
     console.error("Error al registrar usuario:", err);
     res.status(500).json({ error: "Error al registrar usuario" });
@@ -329,6 +430,7 @@ app.get("/api/userData", async (req, res) => {
         id: user.id,
         email: user.email,
         nombre: user.nombre,
+        u_nivel: user.u_nivel,
         customRates,
         userSettings,
       },
@@ -354,6 +456,10 @@ app.get("/api/userData", async (req, res) => {
 });
 
 // Iniciar el servidor
+
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
+});
+server.listen(port2, () => {
+  console.log(`Servidor WebSocket escuchando en http://localhost:${port2}`);
 });

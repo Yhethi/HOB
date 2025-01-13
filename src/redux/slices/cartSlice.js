@@ -33,7 +33,7 @@ export const cartSlice = createSlice({
         precio,
         imagen_url,
         nombre,
-        usuario_id,
+        user_id,
         cantidad,
       } = action.payload;
 
@@ -51,7 +51,7 @@ export const cartSlice = createSlice({
           precio,
           imagen_url,
           nombre,
-          usuario_id,
+          user_id,
           cantidad,
         });
       }

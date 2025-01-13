@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently \"yarn vite\" \"yarn start\"",
     "vite": "vite",
-    "start": "node src/api/connection.js",
+    "start": "node server.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -40,6 +40,8 @@
     "react-tsparticles": "2.12.0",
     "sass-embedded": "^1.79.4",
     "sass-migrator": "^2.2.1",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "styled-components": "^6.1.13",
     "tsparticles": "2.12.0"
   },

@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { Login } from "./Login.jsx";
 import { UserProfile } from "./UserProfile.jsx";
-import useAuth from "../assets/hooks/useAuth.js";
 import { fetchUserData } from "../redux/actions/fetchUserData.js";
+import useAuth from "../../middleware/useAuth.js";
 
 const PrivateRoute = () => {
   const dispatch = useDispatch();

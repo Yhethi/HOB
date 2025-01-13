@@ -4,7 +4,7 @@ const initialState = {
   products: [
     {
       id: 0,
-      usuario_id: 0,
+      user_id: 0,
       descripcion: "",
       nombre: "",
       precio: 0,

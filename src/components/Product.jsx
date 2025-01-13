@@ -70,9 +70,9 @@ export const Product = ({ product }) => {
             src={product.imagen_url}
             // src="https://images-na.ssl-images-amazon.com/images/I/41hbmiP+77L._AC_UL450_SR450,320_.jpg"
             alt={product.descripcion}
-            onClick={() => {
-              handleToCart(product.id, cantidad);
-            }}
+            // onClick={() => {
+            //   handleToCart(product.id, cantidad);
+            // }}
           />
         </div>
         <div className="card__product__data">

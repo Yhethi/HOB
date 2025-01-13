@@ -97,6 +97,8 @@
 - Cuando se le da al search y el carrito está activo, este se cerrará
 
 1.062
-- Tasas modificables añadidas
-- Cards en UserProfile
-- AutoRefresh de la data cuando se hace algun cambio
+- Tasas modificables añadidas.
+- Cards en UserProfile.
+- AutoRefresh de la data cuando se hace algun cambio.
+
+1.07

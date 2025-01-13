@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import { loginUser, logoutUser } from "../../redux/slices/authSlice";
+import { loginUser, logoutUser } from "../src/redux/slices/authSlice";
 
 const useAuth = () => {
   const dispatch = useDispatch();
@@ -17,7 +17,7 @@ const useAuth = () => {
       }
 
       try {
-        const response = await axios.post("/api/validate-token", { token });
+        const response = await axios.post("/api/auth/validateToken", { token });
         if (response.data.success) {
           dispatch(
             loginUser({

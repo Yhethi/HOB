@@ -12,7 +12,7 @@ export const fetchUserData = () => async (dispatch) => {
       return;
     }
 
-    const response = await axios.get("/api/userData", {
+    const response = await axios.get("/api/auth/userData", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

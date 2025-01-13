@@ -33,9 +33,9 @@ import { clearCart, setShowCart } from "../redux/slices/cartSlice";
 import { toggleSidebar } from "../redux/slices/sidebarSlice";
 import { Sidebar } from "./Sidebar";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../assets/hooks/useAuth";
 import { logoutUser } from "../redux/slices/authSlice";
 import { setIsLoading } from "../redux/slices/loaderSlice";
+import useAuth from "../../middleware/useAuth";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -244,23 +244,23 @@ export const Header = () => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      {/* <MenuItem>
+      <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="error">
             <MailIcon />
           </Badge>
         </IconButton>
         <p>Messages</p>
-      </MenuItem> */}
-      {/* <MenuItem onClick={togglePrimaryColor}>
+      </MenuItem>
+      <MenuItem onClick={togglePrimaryColor}>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={isDarkMode ? "on" : "off"} color="error">
             <DarkModeIcon />
           </Badge>
         </IconButton>
         <p>Modo Oscuro</p>
-      </MenuItem> */}
-      {/* <MenuItem>
+      </MenuItem>
+      <MenuItem>
         <IconButton
           size="large"
           aria-label="show 17 new notifications"
@@ -271,7 +271,7 @@ export const Header = () => {
           </Badge>
         </IconButton>
         <p>Notifications</p>
-      </MenuItem> */}
+      </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -337,6 +337,7 @@ export const Header = () => {
                 sx={{ mr: 2 }}
                 onClick={() => {
                   navigate("/");
+                  handleCloseCartIfMobile();
                 }}
               >
                 <HomeIcon />
@@ -430,6 +431,16 @@ export const Header = () => {
                 </IconButton>
                 <IconButton
                   size="large"
+                  aria-label="account of current user"
+                  aria-controls="primary-search-account-menu"
+                  aria-haspopup="true"
+                  color="inherit"
+                  onClick={handleProfileMenuOpen}
+                >
+                  <AccountCircle />
+                </IconButton>
+                {/* <IconButton
+                  size="large"
                   aria-label="show more"
                   aria-controls={mobileMenuId}
                   aria-haspopup="true"
@@ -437,7 +448,7 @@ export const Header = () => {
                   color="inherit"
                 >
                   <MoreIcon />
-                </IconButton>
+                </IconButton> */}
               </Box>
             </Toolbar>
           </AppBar>
