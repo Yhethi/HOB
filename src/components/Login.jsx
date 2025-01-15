@@ -22,6 +22,7 @@ export const Login = () => {
     try {
       const response = await fetch(import.meta.env.VITE_URL_TURSO_DB, {
         method: "POST",
+        mode: "no-cors", // Añadir modo no-cors
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${import.meta.env.VITE_TK_TURSO_BEARER}`,
