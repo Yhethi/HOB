@@ -8,34 +8,36 @@ import PrivateRoute from "../components/PrivateRoute.jsx";
 import Register from "../components/Register.jsx";
 import Tienda from "../components/Tienda.jsx";
 
+import { Navigate, Outlet } from "react-router-dom";
+import RequireAuth from "../../middleware/RequireAuth.jsx";
+import { Login } from "../components/Login.jsx";
+import PublicRoute from "../../middleware/PublicRoute.jsx";
+
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-  },
-  {
-    path: "/login",
-    element: <PrivateRoute />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/tienda/:id_del_usuario",
-    element: <Tienda />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/perfil",
-    element: <PrivateRoute />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "*",
-    element: <NotFound />,
-    errorElement: <ErrorPage />,
+    errorElement: <NotFound />,
+    children: [
+      {
+        path: "perfil",
+        element: <RequireAuth />,
+        children: [{ path: "", element: <UserProfile /> }],
+      },
+      {
+        path: "login",
+        element: <PublicRoute />,
+        children: [{ path: "", element: <Login /> }],
+      },
+      {
+        path: "register",
+        element: <PublicRoute />,
+        children: [{ path: "", element: <Register /> }],
+      },
+      {
+        path: "tienda/:id_del_usuario",
+        element: <Tienda />,
+      },
+    ],
   },
 ]);

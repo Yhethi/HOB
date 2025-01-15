@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import "../assets/styles/Register.scss";
 import { useNavigate } from "react-router-dom";
 import ParticlesBackground from "./tools/ParticlesBackground";
 import { Header } from "./Header";

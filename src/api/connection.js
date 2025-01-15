@@ -312,7 +312,7 @@ app.post("/api/register", async (req, res) => {
 
 app.patch("/api/updateCustomRate", async (req, res) => {
   const { user_id, usd_to_bolivares, usd_to_pesos, usd } = req.body;
-  console.log("req.body:", req.body);
+  // console.log("req.body:", req.body);
 
   try {
     const connection = await mysql.createConnection(dbConfig);
@@ -352,7 +352,7 @@ app.patch("/api/updateCustomRateCheckBox", async (req, res) => {
       is_custom_rate = ?
     WHERE user_id = ?
   `;
-    console.log(value, user_id);
+    // console.log(value, user_id);
 
     await connection.execute(query, [value, user_id]);
     await connection.end();

@@ -1,8 +1,7 @@
 import React from "react";
-import "../assets/styles/BackgroundAnimated.scss";
 export const BackgroundAnimated = () => {
   return (
-    <>
+    <div className="backgroundAnimated">
       {/* <div class="context">
         <h1>Pure Css Animated Background</h1>
       </div> */}
@@ -20,6 +19,6 @@ export const BackgroundAnimated = () => {
           <li></li>
         </ul>
       </div>
-    </>
+    </div>
   );
 };

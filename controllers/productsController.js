@@ -1,7 +1,7 @@
 import { createConnection } from "../services/dbService.js";
 
 export const getProducts = async (req, res) => {
-  console.log("req:", req);
+  // console.log("req:", req);
 
   try {
     const { userId } = req.query;

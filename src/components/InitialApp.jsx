@@ -10,22 +10,8 @@ import { fetchUserData } from "./redux/actions/fetchUserData";
 import socket from "./../socket";
 import "./styles/main.scss";
 import { Outlet, useLocation } from "react-router-dom";
-const hideComponentsInRoutes = [
-  "/login",
-  "/register",
-  "/perfil",
-  "/tienda/:id_del_usuario",
-];
-const shouldHideComponents = () => {
-  const location = useLocation(); // Ruta actual
-  const currentPath = location.pathname;
-  return hideComponentsInRoutes.some((path) => {
-    const pathRegex = new RegExp(`^${path.replace(/:[^/]+/g, "[^/]+")}$`);
-    return pathRegex.test(currentPath);
-  });
-};
 
-function App() {
+function InitialApp() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
 
@@ -51,18 +37,14 @@ function App() {
 
   return (
     <div>
-      {!hideComponents && (
-        <>
-          <Header />
-          <BackgroundAnimated />
-          <Products userToGet={null} />
-          <Cart />
-          <PriceFetcher />
-        </>
-      )}
-      <Outlet />
+      <Header />
+      <BackgroundAnimated />
+      <Products userToGet={null} />
+      <Cart />
+      <PriceFetcher />
     </div>
   );
 }
 
-export default App;
+export default InitialApp;
+// Test

@@ -104,3 +104,8 @@
 1.07
 - Carpetas ordenadas.
 - Titulo cambiado.
+
+1.08
+- Scss estructurado.
+- Rutas arregladas.
+- Middlewares de autenticacion y de la ruta publica.

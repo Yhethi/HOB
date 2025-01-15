@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "../assets/styles/login.scss";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";

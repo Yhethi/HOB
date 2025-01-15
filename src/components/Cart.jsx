@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import "../assets/styles/cart.scss";
 import { useDispatch, useSelector } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
 import {
@@ -103,8 +102,8 @@ export const Cart = () => {
       );
     }
   };
-  const cartItems = useSelector((state) => state.cart.products); // Asegúrate de usar el nombre correcto del estado
-
+  const cartItems = useSelector((state) => state.cart.products); 
+  
   useEffect(() => {
     const savedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
     dispatch(getActualCart(savedCartItems));

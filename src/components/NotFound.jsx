@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../assets/styles/notFound.scss";
 import { BackgroundAnimated } from "./BackgroundAnimated";
 import notFound from "../assets/images/NotFound/notFound.png";
 

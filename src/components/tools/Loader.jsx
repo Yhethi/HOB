@@ -1,5 +1,4 @@
 import React from "react";
-import "../../assets/styles/tools/Loader.scss"; // Archivo CSS para los estilos
 import { useSelector } from "react-redux";
 
 const Loader = () => {

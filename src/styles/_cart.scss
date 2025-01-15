@@ -1,6 +1,5 @@
-@import "./variables.scss";
+@use "variables.scss";
 
-$border-radius: 5px;
 $cart-width: 400px;
 $mobile-cart-width: 100vw;
 
@@ -11,7 +10,7 @@ $mobile-cart-width: 100vw;
   width: 400px;
   max-height: calc(100vh - 64px);
   height: 100vh;
-  background-color: $primary-color;
+  background-color: variables.$primary-color;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
   transform: translateX(100%);
   transition: transform 0.2s ease-in-out;
@@ -38,7 +37,7 @@ $mobile-cart-width: 100vw;
 
     svg {
       font-size: 24px;
-      color: $text-dark-mode;
+      color: variables.$text-dark-mode;
       transition: 0.1s ease;
 
       &:hover {
@@ -124,12 +123,12 @@ $mobile-cart-width: 100vw;
   .cart__card {
     display: flex;
     align-items: center;
-    background-color: $primary-color;
-    border-radius: $border-radius;
+    background-color: variables.$primary-color;
+    border-radius: variables.$border-radius;
     padding: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
-    border: 1px solid $text-dark-mode;
+    border: 1px solid variables.$text-dark-mode;
     // min-width: 362px;
     &:hover {
       transform: scale(1.02);
@@ -138,7 +137,7 @@ $mobile-cart-width: 100vw;
     .delete__button {
       margin-right: 10px;
       cursor: pointer;
-      color: $text-dark-mode;
+      color: variables.$text-dark-mode;
       font-size: 18px;
       transition: color 0.3s ease;
 
@@ -150,7 +149,7 @@ $mobile-cart-width: 100vw;
     .card__image {
       width: 60px;
       height: 60px;
-      border-radius: $border-radius;
+      border-radius: variables.$border-radius;
       overflow: hidden;
       flex-shrink: 0;
       margin-right: 15px;
@@ -168,26 +167,26 @@ $mobile-cart-width: 100vw;
       gap: 5px;
       width: 100%;
       .cart__title {
-        color: $text-dark-mode;
+        color: variables.$text-dark-mode;
         font-size: 16px;
         font-weight: 500;
       }
 
       .cart__barcode {
         font-size: 12px;
-        color: $text-dark-mode;
+        color: variables.$text-dark-mode;
       }
 
       .cart__description {
         font-size: 14px;
-        color: $text-dark-mode;
+        color: variables.$text-dark-mode;
         margin-top: 4px;
       }
 
       .cart__price {
         font-size: 14px;
         font-weight: bold;
-        color: $text-dark-mode;
+        color: variables.$text-dark-mode;
       }
       .card_data {
         width: 100%;
@@ -201,8 +200,8 @@ $mobile-cart-width: 100vw;
         padding: 0;
         font-size: 14px;
         border-radius: none;
-        background-color: $primary-color;
-        color: $text-dark-mode;
+        background-color: variables.$primary-color;
+        color: variables.$text-dark-mode;
         text-align: center;
         display: grid;
         place-content: center;
@@ -210,8 +209,8 @@ $mobile-cart-width: 100vw;
       .set_quantity {
         width: 25px;
         height: 25px;
-        background-color: $text-dark-mode;
-        color: $primary-color;
+        background-color: variables.$text-dark-mode;
+        color: variables.$primary-color;
         border: none;
         display: flex;
         align-items: center;
@@ -221,11 +220,11 @@ $mobile-cart-width: 100vw;
         // border-radius: 4px;
         &.resta {
           border-radius: none;
-          border-radius: $border-radius 0 0 $border-radius;
+          border-radius: variables.$border-radius 0 0 variables.$border-radius;
         }
         &.suma {
           border-radius: none;
-          border-radius: 0 $border-radius $border-radius 0;
+          border-radius: 0 variables.$border-radius variables.$border-radius 0;
         }
       }
 
@@ -236,7 +235,7 @@ $mobile-cart-width: 100vw;
         display: flex;
         flex-direction: column;
         align-items: center;
-        color: $text-dark-mode;
+        color: variables.$text-dark-mode;
         .buttons_cantidad {
           display: flex;
         }
@@ -244,10 +243,10 @@ $mobile-cart-width: 100vw;
     }
   }
   .contenedor__totales {
-    background: $primary-color;
+    background: variables.$primary-color;
     width: 100%;
     height: 17%;
-    border-top: 2px solid $text-dark-mode;
+    border-top: 2px solid variables.$text-dark-mode;
     padding: 10px;
     padding-bottom: 0;
     text-align: right;
@@ -258,7 +257,7 @@ $mobile-cart-width: 100vw;
       flex-direction: column;
       gap: 7px;
       font-size: 1.2rem;
-      color: $text-dark-mode;
+      color: variables.$text-dark-mode;
       padding-bottom: 5px;
     }
     .glow-on-hover {

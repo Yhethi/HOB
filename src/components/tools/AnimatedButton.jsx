@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import anime from "animejs";
-import "../../assets/styles/tools/ButtonAnimation.scss";
 
 const AnimatedButton = () => {
   const textRef = useRef(null);
@@ -93,21 +92,23 @@ const AnimatedButton = () => {
 
   return (
     <>
-      <div className="button" ref={buttonRef} onClick={handleAnimation}>
-        <div className="text" ref={textRef}>
-          Finalizar Compra
+      <div className="buttonAnimation__container">
+        <div className="button" ref={buttonRef} onClick={handleAnimation}>
+          <div className="text" ref={textRef}>
+            Finalizar Compra
+          </div>
         </div>
-      </div>
-      <div className="progress-bar" ref={progressBarRef}>
-        <div className="compra_realizada">
-          <span>Compra Realizada</span>
-          <svg x="0px" y="0px" viewBox="0 0 25 30">
-            <path
-              className="check"
-              ref={pathRef}
-              d="M2,19.2C5.9,23.6,9.4,28,9.4,28L23,2"
-            />
-          </svg>
+        <div className="progress-bar" ref={progressBarRef}>
+          <div className="compra_realizada">
+            <span>Compra Realizada</span>
+            <svg x="0px" y="0px" viewBox="0 0 25 30">
+              <path
+                className="check"
+                ref={pathRef}
+                d="M2,19.2C5.9,23.6,9.4,28,9.4,28L23,2"
+              />
+            </svg>
+          </div>
         </div>
       </div>
     </>

@@ -1,4 +1,4 @@
-@import "./variables.scss";
+@use "variables.scss";
 
 .boxProduct {
   padding-top: 74px;
@@ -14,12 +14,12 @@
 
 .card__product {
   width: 170px;
-  background: $bg-card-product !important;
+  background: variables.$bg-card-product !important;
   border-radius: 10px !important;
-  border: 1px solid $text-dark-mode;
+  border: 1px solid variables.$text-dark-mode;
   overflow: hidden !important;
   cursor: pointer;
-  box-shadow: 1px 1px 3px $text-dark-mode;
+  box-shadow: 1px 1px 3px variables.$text-dark-mode;
   // transition: transform 0.3s ease, top 0.3s ease, left 0.3s ease !important;
   transition-duration: 0.3s;
   &:hover {
@@ -77,7 +77,7 @@
       .card__product__header h2 {
         font-size: 1.1rem;
         text-align: center;
-        color: $text-dark-mode;
+        color: variables.$text-dark-mode;
         max-height: 24px;
         overflow-y: auto;
       }
@@ -111,7 +111,7 @@
       }
 
       .card_product_description p::-webkit-scrollbar-thumb {
-        background-color: $primary-color; /* color of the scroll thumb */
+        background-color: variables.$primary-color; /* color of the scroll thumb */
         border-radius: 20px; /* roundness of the scroll thumb */
         border: 0px solid rgb(0, 0, 0); /* creates padding around scroll thumb */
       }
@@ -126,19 +126,19 @@
       min-width: 50%;
       background: green;
       border: none;
-      border: 1px solid $primary-color;
+      border: 1px solid variables.$primary-color;
       border-radius: 5px;
       cursor: pointer;
       svg {
         font-size: 24px;
-        color: $primary-color;
+        color: variables.$primary-color;
       }
       transition: 0.2s;
     }
     &:hover {
       .submit__button {
         min-width: 50%;
-        background: $primary-color;
+        background: variables.$primary-color;
         border: none;
         border: 1px solid green;
         border-radius: 5px;
@@ -165,7 +165,7 @@
       align-items: center;
       gap: 10px;
       label {
-        color: $text-dark-mode;
+        color: variables.$text-dark-mode;
       }
     }
 

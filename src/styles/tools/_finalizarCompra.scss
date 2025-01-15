@@ -1,4 +1,4 @@
-@import "../variables.scss";
+@use "../variables.scss";
 
 .cssbuttons-io {
   position: relative;
@@ -10,13 +10,13 @@
   border: none;
   background: linear-gradient(to right, #2de25a, #00e043);
   overflow: hidden;
-  color: $primary-color;
+  color: variables.$primary-color;
   width: 100%;
   .currentColor {
     font-size: 20px;
   }
   &:hover {
-    color: $text-dark-mode;
+    color: variables.$text-dark-mode;
   }
   svg {
     width: 1.2em;
@@ -45,7 +45,7 @@
 
   &::before {
     content: "";
-    background: $text-dark-mode;
+    background: variables.$text-dark-mode;
     width: 120%;
     left: -10%;
     transform: skew(30deg);

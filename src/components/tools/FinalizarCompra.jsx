@@ -1,5 +1,4 @@
 import React from "react";
-import "../../assets/styles/tools/FinalizarCompra.scss";
 import { clearCart } from "../../redux/slices/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import socket from "../../../socket";

@@ -1,6 +1,14 @@
 import React from "react";
 
-export const ProductTable = ({ products, onEdit, onDelete }) => {
+export const ProductTable = ({
+  isOpen,
+  onClose,
+  products,
+  onEdit,
+  onDelete,
+}) => {
+  if (!isOpen) return null;
+
   return (
     <table>
       <thead>

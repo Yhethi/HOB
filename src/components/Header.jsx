@@ -20,7 +20,6 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import "../assets/styles/Header.scss";
 import { useState } from "react";
 // Icons
 import DarkModeIcon from "@mui/icons-material/DarkMode";
@@ -36,6 +35,7 @@ import { useNavigate } from "react-router-dom";
 import { logoutUser } from "../redux/slices/authSlice";
 import { setIsLoading } from "../redux/slices/loaderSlice";
 import useAuth from "../../middleware/useAuth";
+import { darkModeActived } from "../redux/slices/darkModeSlice";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -101,6 +101,7 @@ export const Header = () => {
     const newTheme = !isDarkMode;
     getDarkMode(isDarkMode);
     setIsDarkMode(newTheme);
+    dispatch(darkModeActived(isDarkMode));
     localStorage.setItem("isDarkMode", JSON.stringify(newTheme));
   };
 
@@ -313,60 +314,64 @@ export const Header = () => {
 
   return (
     <>
-      <Sidebar />
-      <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
-        <Box sx={{ flexGrow: 1 }}>
-          <AppBar className="appBar" position="static">
-            <Toolbar>
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="open drawer"
-                sx={{ mr: 2 }}
-                onClick={handleToggleSidebar}
-              >
-                <MenuIcon />
-              </IconButton>
-
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="open drawer"
-                sx={{ mr: 2 }}
-                onClick={() => {
-                  navigate("/");
-                  handleCloseCartIfMobile();
-                }}
-              >
-                <HomeIcon />
-              </IconButton>
-              <Search>
-                <SearchIconWrapper>
-                  <SearchIcon />
-                </SearchIconWrapper>
-                <StyledInputBase
-                  className="input__search"
-                  placeholder="Search…"
-                  inputProps={{ "aria-label": "search" }}
-                  onChange={handleSearch}
-                  onClick={handleCloseCartIfMobile}
-                />
-              </Search>
-              <Box sx={{ flexGrow: 1 }} />
-              <Box sx={{ display: { xs: "none", md: "flex" } }}>
+      <div className="header__component">
+        <Sidebar />
+        <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+          <Box sx={{ flexGrow: 1 }}>
+            <AppBar className="appBar" position="static">
+              <Toolbar>
                 <IconButton
                   size="large"
-                  aria-label="show 4 new mails"
+                  edge="start"
                   color="inherit"
-                  onClick={togglePrimaryColor}
+                  aria-label="open drawer"
+                  sx={{ mr: 2 }}
+                  onClick={handleToggleSidebar}
                 >
-                  <Badge badgeContent={isDarkMode ? "on" : "off"} color="error">
-                    <DarkModeIcon />
-                  </Badge>
+                  <MenuIcon />
                 </IconButton>
-                {/* <IconButton
+
+                <IconButton
+                  size="large"
+                  edge="start"
+                  color="inherit"
+                  aria-label="open drawer"
+                  sx={{ mr: 2 }}
+                  onClick={() => {
+                    navigate("/");
+                    handleCloseCartIfMobile();
+                  }}
+                >
+                  <HomeIcon />
+                </IconButton>
+                <Search>
+                  <SearchIconWrapper>
+                    <SearchIcon />
+                  </SearchIconWrapper>
+                  <StyledInputBase
+                    className="input__search"
+                    placeholder="Search…"
+                    inputProps={{ "aria-label": "search" }}
+                    onChange={handleSearch}
+                    onClick={handleCloseCartIfMobile}
+                  />
+                </Search>
+                <Box sx={{ flexGrow: 1 }} />
+                <Box sx={{ display: { xs: "none", md: "flex" } }}>
+                  <IconButton
+                    size="large"
+                    aria-label="show 4 new mails"
+                    color="inherit"
+                    onClick={togglePrimaryColor}
+                  >
+                    <Badge
+                      badgeContent={isDarkMode ? "on" : "off"}
+                      color="error"
+                    >
+                      <DarkModeIcon />
+                    </Badge>
+                  </IconButton>
+                  {/* <IconButton
                   size="large"
                   aria-label="show 4 new mails"
                   color="inherit"
@@ -384,62 +389,65 @@ export const Header = () => {
                     <NotificationsIcon />
                   </Badge>
                 </IconButton> */}
-                <IconButton
-                  size="large"
-                  aria-label="show 4 new mails"
-                  color="inherit"
-                  onClick={toggleShowCart}
-                  className={`cart-button ${isPulsing ? "pulse" : ""}`}
-                >
-                  <Badge badgeContent={totalItems} color="error">
-                    <ShoppingCartIcon />
-                  </Badge>
-                </IconButton>
-                <IconButton
-                  size="large"
-                  edge="end"
-                  aria-label="account of current user"
-                  aria-controls={menuId}
-                  aria-haspopup="true"
-                  onClick={handleProfileMenuOpen}
-                  color="inherit"
-                >
-                  <AccountCircle />
-                </IconButton>
-              </Box>
-              <Box sx={{ display: { xs: "flex", md: "none" } }}>
-                <IconButton
-                  size="large"
-                  aria-label="show 4 new mails"
-                  color="inherit"
-                  onClick={toggleShowCart}
-                  className={`cart-button ${isPulsing ? "pulse" : ""}`}
-                >
-                  <Badge badgeContent={totalItems} color="error">
-                    <ShoppingCartIcon />
-                  </Badge>
-                </IconButton>
-                <IconButton
-                  size="large"
-                  aria-label="show 4 new mails"
-                  color="inherit"
-                  onClick={togglePrimaryColor}
-                >
-                  <Badge badgeContent={isDarkMode ? "on" : "off"} color="error">
-                    <DarkModeIcon />
-                  </Badge>
-                </IconButton>
-                <IconButton
-                  size="large"
-                  aria-label="account of current user"
-                  aria-controls="primary-search-account-menu"
-                  aria-haspopup="true"
-                  color="inherit"
-                  onClick={handleProfileMenuOpen}
-                >
-                  <AccountCircle />
-                </IconButton>
-                {/* <IconButton
+                  <IconButton
+                    size="large"
+                    aria-label="show 4 new mails"
+                    color="inherit"
+                    onClick={toggleShowCart}
+                    className={`cart-button ${isPulsing ? "pulse" : ""}`}
+                  >
+                    <Badge badgeContent={totalItems} color="error">
+                      <ShoppingCartIcon />
+                    </Badge>
+                  </IconButton>
+                  <IconButton
+                    size="large"
+                    edge="end"
+                    aria-label="account of current user"
+                    aria-controls={menuId}
+                    aria-haspopup="true"
+                    onClick={handleProfileMenuOpen}
+                    color="inherit"
+                  >
+                    <AccountCircle />
+                  </IconButton>
+                </Box>
+                <Box sx={{ display: { xs: "flex", md: "none" } }}>
+                  <IconButton
+                    size="large"
+                    aria-label="show 4 new mails"
+                    color="inherit"
+                    onClick={toggleShowCart}
+                    className={`cart-button ${isPulsing ? "pulse" : ""}`}
+                  >
+                    <Badge badgeContent={totalItems} color="error">
+                      <ShoppingCartIcon />
+                    </Badge>
+                  </IconButton>
+                  <IconButton
+                    size="large"
+                    aria-label="show 4 new mails"
+                    color="inherit"
+                    onClick={togglePrimaryColor}
+                  >
+                    <Badge
+                      badgeContent={isDarkMode ? "on" : "off"}
+                      color="error"
+                    >
+                      <DarkModeIcon />
+                    </Badge>
+                  </IconButton>
+                  <IconButton
+                    size="large"
+                    aria-label="account of current user"
+                    aria-controls="primary-search-account-menu"
+                    aria-haspopup="true"
+                    color="inherit"
+                    onClick={handleProfileMenuOpen}
+                  >
+                    <AccountCircle />
+                  </IconButton>
+                  {/* <IconButton
                   size="large"
                   aria-label="show more"
                   aria-controls={mobileMenuId}
@@ -449,13 +457,14 @@ export const Header = () => {
                 >
                   <MoreIcon />
                 </IconButton> */}
-              </Box>
-            </Toolbar>
-          </AppBar>
-          {renderMobileMenu}
-          {renderMenu}
-        </Box>
-      </ThemeProvider>
+                </Box>
+              </Toolbar>
+            </AppBar>
+            {renderMobileMenu}
+            {renderMenu}
+          </Box>
+        </ThemeProvider>
+      </div>
     </>
   );
 };

@@ -1,0 +1,15 @@
+@use "mixins";
+
+.sidebar_component {
+  @include mixins.respond-to("md") {
+    width: 200px;
+  }
+}
+
+.MuiPaper-root {
+  background: var(--primary-color);
+}
+
+.MuiSvgIcon-root {
+  color: var(--text-dark-mode);
+}

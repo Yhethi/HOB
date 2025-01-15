@@ -1,11 +1,11 @@
-@import "./variables.scss";
+@use "variables.scss";
 
 .not-found {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  color: $text-dark-mode;
+  color: variables.$text-dark-mode;
   text-align: center;
 
   .not-found__content {
@@ -42,7 +42,7 @@
     .not-found__message {
       font-size: 1.25rem;
       margin: 1rem 0;
-      color: $text-dark-mode;
+      color: variables.$text-dark-mode;
       animation: slideIn 1.8s ease-in-out;
     }
 

@@ -1,10 +1,10 @@
-@import "./variables.scss";
+@use "variables.scss";
 
 .global_profile {
   padding-top: 64px;
   .up_profile {
     display: flex;
-    background: $bg-card-product;
+    background: variables.$bg-card-product;
     padding: 10px;
 
     @media (max-width: 800px) {

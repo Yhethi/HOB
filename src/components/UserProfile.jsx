@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "../assets/styles/userProfile.scss";
 import {
   FaUserEdit,
   FaEnvelope,
@@ -19,6 +18,8 @@ import { ProductTable } from "./ProductTable";
 import { ProductModal } from "./ProductModal";
 import { ConfirmDelete } from "./ConfirmDelete";
 import { useProducts } from "../hooks/useProducts";
+import ProductCRUD from "./ProductCRUD";
+import Modal from "./tools/Modal";
 
 export const UserProfile = () => {
   const user = useSelector((state) => state.auth.user);
@@ -65,12 +66,20 @@ export const UserProfile = () => {
     useProducts();
 
   const [isModalOpenProducts, setIsModalOpenProducts] = useState(false);
+  const [isModalOpenAddProducts, setIsModalOpenAddProducts] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
+  // const handleShowProductsTable = () => {
+  //   setSelectedProduct(null);
+  //   setIsModalOpenProducts(true);
+  // };
+  const openProductsModal = () => setIsModalOpenProducts(true);
+  const closeProductsModal = () => setIsModalOpenProducts(false);
+
   const handleCreate = () => {
     setSelectedProduct(null);
-    setIsModalOpenProducts(true);
+    setIsModalOpenAddProducts(true);
   };
 
   const handleEdit = (product) => {
@@ -95,6 +104,43 @@ export const UserProfile = () => {
       await createProduct(product);
     }
   };
+
+  // useEffect(() => {
+  //   dispatch(setIsLoading(true));
+  //   console.log("user:", user.id, products);
+  //   const userToGet = user.id;
+  //   if (user) {
+  //     try {
+  //       if (userToGet) {
+  //         fetch(`/api/productos?userId=${userToGet}`)
+  //           .then((response) => response.json())
+  //           .then((data) => dispatch(setProducts(data)))
+  //           .catch((error) =>
+  //             console.error("Error fetching productos:", error)
+  //           );
+  //         console.log("entra");
+  //       } else {
+  //         fetch(`/api/productos?userId=${user.id}`)
+  //           .then((response) => response.json())
+  //           .then((data) => dispatch(setProducts(data)))
+  //           .catch((error) =>
+  //             console.error("Error fetching productos:", error)
+  //           );
+  //       }
+  //     } catch (e) {
+  //       console.log(e);
+  //     } finally {
+  //       setTimeout(() => {
+  //         dispatch(setIsLoading(false));
+  //       }, 500);
+  //     }
+  //   } else {
+  //     dispatch(setProducts(testProducts));
+  //     setTimeout(() => {
+  //       dispatch(setIsLoading(false));
+  //     }, 500);
+  //   }
+  // }, [user, dispatch]);
 
   return (
     <>
@@ -186,9 +232,9 @@ export const UserProfile = () => {
             </div>
           </div>
           <div className="upCards cards_up_right">
-            <div className="card">
+            <div className="card" onClick={openProductsModal}>
               <p>Productos</p>
-              <span class="material-symbols-outlined">inventory_2</span>
+              <span className="material-symbols-outlined">inventory_2</span>
             </div>
             <div className="card">
               <p>Texto</p>
@@ -230,14 +276,16 @@ export const UserProfile = () => {
         </div>
       </div>
       <button onClick={handleCreate}>Agregar Producto</button>
-      <ProductTable
+      {/* <ProductTable
         products={products}
         onEdit={handleEdit}
         onDelete={handleDelete}
-      />
-      <ProductModal
         isOpen={isModalOpenProducts}
         onClose={() => setIsModalOpenProducts(false)}
+      />
+      <ProductModal
+        isOpen={isModalOpenAddProducts}
+        onClose={() => setIsModalOpenAddProducts(false)}
         onSave={saveProduct}
         initialData={selectedProduct}
       />
@@ -245,7 +293,13 @@ export const UserProfile = () => {
         isOpen={isDeleteOpen}
         onClose={() => setIsDeleteOpen(false)}
         onConfirm={confirmDelete}
-      />
+      /> */}
+      {/* Modal para productos */}
+      {isModalOpenProducts && (
+        <Modal onClose={closeProductsModal}>
+          <ProductCRUD closeModal={closeProductsModal} />
+        </Modal>
+      )}
     </>
   );
 };

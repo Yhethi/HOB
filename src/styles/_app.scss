@@ -1,4 +1,4 @@
-@import "./variables.scss";
+@use "variables.scss";
 
 * {
   margin: 0;
@@ -7,7 +7,7 @@
 }
 
 html {
-  background-color: $primary-color;
+  background-color: var(--primary-color);
   height: auto;
 }
 
@@ -26,4 +26,11 @@ html {
   background-color: #536996; /* color of the scroll thumb */
   border-radius: 20px; /* roundness of the scroll thumb */
   border: 3px solid rgb(0, 0, 0); /* creates padding around scroll thumb */
+}
+
+.d-flex-center {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

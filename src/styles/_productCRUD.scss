@@ -1,0 +1,117 @@
+.product-crud__container {
+  background: #1e1e2f;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  color: #ffffff;
+  font-family: "Roboto", sans-serif;
+
+  h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #00d1ff;
+    text-shadow: 0 2px 8px rgba(0, 209, 255, 0.6);
+  }
+
+  input {
+    background: #252538;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    color: #00d1ff;
+    margin-right: 10px;
+    font-size: 1rem;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease-in-out;
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 8px #00d1ff;
+    }
+  }
+
+  button {
+    padding: 10px 20px;
+    background: #00d1ff;
+    color: #1e1e2f;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 209, 255, 0.4);
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: #007a99;
+      color: #ffffff;
+      box-shadow: 0 4px 20px rgba(0, 122, 153, 0.6);
+    }
+
+    &:active {
+      transform: translateY(2px);
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+
+    thead {
+      background: #282842;
+      border-bottom: 2px solid #00d1ff;
+
+      th {
+        padding: 12px 15px;
+        text-align: center;
+        color: #00d1ff;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+    }
+
+    tbody {
+      background: #1e1e2f;
+
+      tr {
+        transition: background 0.3s ease;
+
+        &:hover {
+          background: #282842;
+        }
+      }
+
+      td {
+        padding: 12px 15px;
+        text-align: center;
+        font-size: 0.9rem;
+        border-bottom: 1px solid #252538;
+        color: #d1d1d1;
+
+        &:first-child {
+          font-weight: bold;
+          color: #00d1ff;
+        }
+
+        button {
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+  .table__img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 10px;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}
