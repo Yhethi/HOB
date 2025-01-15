@@ -5,13 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { loginUser, logoutUser } from "../redux/slices/authSlice";
 import { setProducts } from "../redux/slices/productsSlice";
 import { setIsLoading } from "../redux/slices/loaderSlice";
-import ParticlesBackground from "./tools/ParticlesBackground";
 import { Header } from "./Header";
-import { clearCart } from "../redux/slices/cartSlice";
 
 export const Login = () => {
-  const [email, setEmail] = useState("admin@gmail.com");
-  const [password, setPassword] = useState("123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [toRegister, setToRegister] = useState(false);
 
@@ -19,10 +17,25 @@ export const Login = () => {
   const navigate = useNavigate();
   const handleLogin = async () => {
     dispatch(setIsLoading(true));
-    try {
-      const response = await axios.post("/api/auth/login", { email, password });
-      localStorage.setItem("authToken", response.data.token);
 
+    console.log("entra", import.meta.env.VITE_URL_TURSO_DB);
+    try {
+      const response = await fetch(import.meta.env.VITE_URL_TURSO_DB, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_TK_TURSO_BEARER}`,
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      console.log("response", response);
+
+      return;
+      localStorage.setItem("authToken", response.data.token);
       if (response.data.success) {
         dispatch(
           loginUser({
@@ -34,9 +47,9 @@ export const Login = () => {
           .then((response) => response.json())
           .then((data) => dispatch(setProducts(data)))
           .catch((error) => console.error("Error fetching productos:", error));
-        dispatch(clearCart());
+
         localStorage.setItem("cartItems", JSON.stringify([]));
-        navigate("/perfil");
+        navigate("/");
       } else {
         dispatch(logoutUser());
         localStorage.removeItem("authToken");
@@ -48,7 +61,7 @@ export const Login = () => {
     } finally {
       setTimeout(() => {
         dispatch(setIsLoading(false));
-      }, 500);
+      }, 1000);
     }
   };
 
@@ -56,7 +69,6 @@ export const Login = () => {
     <>
       <Header />
       <div className="center_form_login">
-        <ParticlesBackground />
         <form
           className={`form_login ${toRegister && "toRegister"}`}
           onSubmit={(e) => {

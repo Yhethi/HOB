@@ -70,7 +70,7 @@ export const Sidebar = () => {
     setTimeout(() => {
       dispatch(setIsLoading(false));
       document.body.click();
-    }, 400);
+    }, 1000);
   };
   const handleCloseSidebar = () => {
     dispatch(toggleSidebar(!isOpen));

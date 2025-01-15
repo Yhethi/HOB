@@ -28,7 +28,6 @@ import HomeIcon from "@mui/icons-material/Home";
 import { getProductFilter } from "../redux/slices/productsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { getDarkMode } from "../js/changeColor";
-import { clearCart, setShowCart } from "../redux/slices/cartSlice";
 import { toggleSidebar } from "../redux/slices/sidebarSlice";
 import { Sidebar } from "./Sidebar";
 import { useNavigate } from "react-router-dom";
@@ -83,11 +82,8 @@ export const Header = () => {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-  const isPulsing = useSelector((state) => state.cart.pulse);
 
-  const showCart = useSelector((state) => state.cart.visible);
   const getSidebarStatus = useSelector((state) => state.sidebar.isOpen);
-  const totalItems = useSelector((state) => state.cart.products.length);
 
   // Redux
   const dispatch = useDispatch();
@@ -109,9 +105,9 @@ export const Header = () => {
     getDarkMode(!isDarkMode);
   }, []);
 
-  const toggleShowCart = () => {
-    dispatch(setShowCart(!showCart));
-  };
+  // const toggleShowCart = () => {
+  //   dispatch(setShowCart(!showCart));
+  // };
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -145,13 +141,12 @@ export const Header = () => {
   const handleLogout = () => {
     dispatch(setIsLoading(true));
     dispatch(logoutUser());
-    dispatch(clearCart());
     localStorage.setItem("cartItems", JSON.stringify([]));
     handleGoTo("/");
     setTimeout(() => {
       dispatch(setIsLoading(false));
       document.body.click();
-    }, 400);
+    }, 1000);
   };
 
   const handleCloseCartIfMobile = () => {
@@ -203,7 +198,7 @@ export const Header = () => {
           Registrarse
         </MenuItem>
       )}
-      {isLogged && (
+      {/* {isLogged && (
         <MenuItem
           onClick={() => {
             handleGoTo("/perfil");
@@ -211,7 +206,7 @@ export const Header = () => {
         >
           My account
         </MenuItem>
-      )}
+      )} */}
       {isLogged && <MenuItem onClick={handleLogout}>Cerrar Sesión</MenuItem>}
       {/* <MenuItem
         onClick={() => {
@@ -389,7 +384,7 @@ export const Header = () => {
                     <NotificationsIcon />
                   </Badge>
                 </IconButton> */}
-                  <IconButton
+                  {/* <IconButton
                     size="large"
                     aria-label="show 4 new mails"
                     color="inherit"
@@ -399,7 +394,7 @@ export const Header = () => {
                     <Badge badgeContent={totalItems} color="error">
                       <ShoppingCartIcon />
                     </Badge>
-                  </IconButton>
+                  </IconButton> */}
                   <IconButton
                     size="large"
                     edge="end"
@@ -413,7 +408,7 @@ export const Header = () => {
                   </IconButton>
                 </Box>
                 <Box sx={{ display: { xs: "flex", md: "none" } }}>
-                  <IconButton
+                  {/* <IconButton
                     size="large"
                     aria-label="show 4 new mails"
                     color="inherit"
@@ -423,7 +418,7 @@ export const Header = () => {
                     <Badge badgeContent={totalItems} color="error">
                       <ShoppingCartIcon />
                     </Badge>
-                  </IconButton>
+                  </IconButton> */}
                   <IconButton
                     size="large"
                     aria-label="show 4 new mails"

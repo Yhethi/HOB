@@ -1,23 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Header } from "./components/Header";
 import { Products } from "./components/Products";
-import { BackgroundAnimated } from "./components/BackgroundAnimated";
 import { useDispatch, useSelector } from "react-redux";
-import { Cart } from "./components/Cart";
-import PriceFetcher from "./components/tools/PriceFetcher";
 import Loader from "./components/tools/Loader";
 import { fetchUserData } from "./redux/actions/fetchUserData";
-import socket from "./../socket";
 import "./styles/main.scss";
 import { Outlet, useLocation } from "react-router-dom";
-const hideComponentsInRoutes = [
-  "/login",
-  "/register",
-  "/perfil",
-  "/tienda/:id_del_usuario",
-];
+import { setIsLoading } from "./redux/slices/loaderSlice";
+
+const hideComponentsInRoutes = ["/login", "/register", "/perfil"];
 const shouldHideComponents = () => {
-  const location = useLocation(); // Ruta actual
+  const location = useLocation();
   const currentPath = location.pathname;
   return hideComponentsInRoutes.some((path) => {
     const pathRegex = new RegExp(`^${path.replace(/:[^/]+/g, "[^/]+")}$`);
@@ -28,36 +21,26 @@ const shouldHideComponents = () => {
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
-
+  const isLoading = useSelector((state) => state.loader.isLoading);
   useEffect(() => {
     dispatch(fetchUserData());
-  }, []);
-
-  useEffect(() => {
-    if (user) {
-      if (user.u_nivel === 2) {
-        socket.emit("registerUser", user.id);
-        socket.on("newNotification", (data) => {
-          alert(`Nueva notificación:\n${data.message}`);
-        });
-      }
+    if (!isLoading) {
+      dispatch(setIsLoading(true));
+      setTimeout(() => {
+        dispatch(setIsLoading(false));
+      }, 500);
     }
-    return () => {
-      socket.off("newNotification");
-    };
   }, []);
 
   const hideComponents = shouldHideComponents();
 
   return (
     <div>
+      <Loader />
       {!hideComponents && (
         <>
           <Header />
-          <BackgroundAnimated />
           <Products userToGet={null} />
-          <Cart />
-          <PriceFetcher />
         </>
       )}
       <Outlet />

@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import ParticlesBackground from "./tools/ParticlesBackground";
 import { Header } from "./Header";
-import { clearCart } from "../redux/slices/cartSlice";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../redux/slices/authSlice";
 
@@ -11,9 +9,12 @@ const Register = () => {
   const [form, setForm] = useState({
     name: "",
     lastName: "",
+    phone: "",
     email: "",
+    username: "",
     password: "",
     confirmPassword: "",
+    company_id: 0,
   });
   const [samePassword, setSamePassword] = useState(false);
   const [toLogin, setToLogin] = useState(false);
@@ -42,29 +43,15 @@ const Register = () => {
           email,
           password,
         });
-
         if (response.data.success) {
           localStorage.setItem("authToken", response.data.token);
-
           dispatch(
             loginUser({
               token: response.data.token,
               user: response.data.user,
             })
           );
-
-          // Opcional: cargar datos adicionales después de iniciar sesión (productos, configuraciones, etc.)
-          fetch(`/api/productos?userId=${response.data.user.id}`)
-            .then((res) => res.json())
-            .then((data) => dispatch(setProducts(data)))
-            .catch((error) =>
-              console.error("Error fetching productos:", error)
-            );
-
-          dispatch(clearCart());
-          localStorage.setItem("cartItems", JSON.stringify([]));
-
-          navigate("/perfil");
+          navigate("/");
         } else {
           console.error("Error al iniciar sesión automáticamente");
         }
@@ -85,7 +72,6 @@ const Register = () => {
     <>
       <Header />
       <div className="center_form_register">
-        <ParticlesBackground />
         <form
           className={`form_register ${toLogin && "toLogin"}`}
           onSubmit={handleSubmit}
@@ -122,13 +108,51 @@ const Register = () => {
           <label>
             <input
               className="input"
+              type="text"
+              placeholder=""
+              required
+              value={form.username}
+              onChange={(e) => setForm({ ...form, username: e.target.value })}
+            />
+            <span>Nombre de Usuario</span>
+          </label>
+
+          <label>
+            <input
+              className="input"
               type="email"
               placeholder=""
               required
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
             />
-            <span>Correo Electronico</span>
+            <span>Correo Electrónico</span>
+          </label>
+
+          <label>
+            <input
+              className="input"
+              type="text"
+              placeholder=""
+              required
+              value={form.phone}
+              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+            />
+            <span>Teléfono</span>
+          </label>
+
+          <label>
+            <input
+              className="input"
+              type="number"
+              placeholder=""
+              required
+              value={form.company_id}
+              onChange={(e) =>
+                setForm({ ...form, company_id: parseInt(e.target.value) })
+              }
+            />
+            <span>ID de la Compañía</span>
           </label>
 
           <label>
@@ -171,7 +195,7 @@ const Register = () => {
               }, 500);
             }}
           >
-            Ya tienes una cuenta? <a href="#">Inicia Sesión</a>
+            ¿Ya tienes una cuenta? <a href="#">Inicia Sesión</a>
           </p>
         </form>
       </div>

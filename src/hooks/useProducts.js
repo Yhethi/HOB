@@ -17,22 +17,22 @@ export const useProducts = () => {
     dispatch(setIsLoading(false));
   };
 
-  const createProduct = async (product) => {
-    const newProduct = await productService.create(product);
-    setProducts([...products, newProduct]);
-  };
+  // const createProduct = async (product) => {
+  //   const newProduct = await productService.create(product);
+  //   setProducts([...products, newProduct]);
+  // };
 
-  const updateProduct = async (product) => {
-    const updatedProduct = await productService.update(product.id, product);
-    setProducts(
-      products.map((p) => (p.id === product.id ? updatedProduct : p))
-    );
-  };
+  // const updateProduct = async (product) => {
+  //   const updatedProduct = await productService.update(product.id, product);
+  //   setProducts(
+  //     products.map((p) => (p.id === product.id ? updatedProduct : p))
+  //   );
+  // };
 
-  const deleteProduct = async (id) => {
-    await productService.remove(id);
-    setProducts(products.filter((p) => p.id !== id));
-  };
+  // const deleteProduct = async (id) => {
+  //   await productService.remove(id);
+  //   setProducts(products.filter((p) => p.id !== id));
+  // };
 
   useEffect(() => {
     fetchProducts();

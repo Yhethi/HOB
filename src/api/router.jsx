@@ -4,9 +4,7 @@ import ErrorPage from "../components/ErrorPage.jsx";
 import NotFound from "../components/NotFound.jsx";
 import { UserProfile } from "../components/UserProfile.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import PrivateRoute from "../components/PrivateRoute.jsx";
 import Register from "../components/Register.jsx";
-import Tienda from "../components/Tienda.jsx";
 
 import { Navigate, Outlet } from "react-router-dom";
 import RequireAuth from "../../middleware/RequireAuth.jsx";
@@ -20,9 +18,9 @@ export const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       {
-        path: "perfil",
+        path: "",
         element: <RequireAuth />,
-        children: [{ path: "", element: <UserProfile /> }],
+        children: [{ path: "" }],
       },
       {
         path: "login",
@@ -34,10 +32,10 @@ export const router = createBrowserRouter([
         element: <PublicRoute />,
         children: [{ path: "", element: <Register /> }],
       },
-      {
-        path: "tienda/:id_del_usuario",
-        element: <Tienda />,
-      },
     ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);

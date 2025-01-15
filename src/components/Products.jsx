@@ -1,19 +1,12 @@
 import * as React from "react";
-import { experimentalStyled as styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid2";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setZoomDynamic } from "../js/zoomImg";
-import { addCartItem } from "../redux/slices/cartSlice";
 import { Product } from "./Product";
 import { AnimatePresence } from "framer-motion";
-import { motion } from "framer-motion";
 import { useRef } from "react";
 import { setProducts } from "../redux/slices/productsSlice";
-import { store } from "../redux/store";
 import { testProducts } from "../test/listProducts";
 import { setIsLoading } from "../redux/slices/loaderSlice";
 
@@ -23,7 +16,6 @@ export const Products = ({ userToGet }) => {
   const allProducts = useSelector((state) => state.products.products);
   // Redux
   const boxProductContainer = useRef(null);
-  const showCart = useSelector((state) => state.cart.visible);
   const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
@@ -50,32 +42,16 @@ export const Products = ({ userToGet }) => {
       } finally {
         setTimeout(() => {
           dispatch(setIsLoading(false));
-        }, 500);
+        }, 1000);
       }
     } else {
       dispatch(setProducts(testProducts));
       setTimeout(() => {
         dispatch(setIsLoading(false));
-      }, 500);
+      }, 1000);
     }
   }, [user, dispatch]);
   const [prevWidth, setPrevWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    const currentWidth = window.innerWidth;
-    if (boxProductContainer.current) {
-      if (currentWidth <= 768) {
-        boxProductContainer.current.style.transform = showCart
-          ? "translateX(-100%)"
-          : "translateX(0%)";
-      }
-    }
-    if (currentWidth > 768) {
-      boxProductContainer.current.style.paddingRight = showCart
-        ? "400px"
-        : "0px";
-    }
-  }, [showCart]);
 
   useEffect(() => {
     const handleResize = () => {

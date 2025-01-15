@@ -1,15 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { experimentalStyled as styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid2";
 import { TbShoppingCart } from "react-icons/tb";
-import {
-  addCartItem,
-  setPulseCart,
-  setShowCart,
-} from "../redux/slices/cartSlice";
 import { motion } from "framer-motion";
 
 export const Product = ({ product }) => {
@@ -25,20 +18,11 @@ export const Product = ({ product }) => {
   const decrementQuantity = () => {
     setCantidad((prevCantidad) => (prevCantidad > 1 ? prevCantidad - 1 : 1));
   };
-  const showCart = useSelector((state) => state.cart.visible);
-  const isPulsing = useSelector((state) => state.cart.pulse);
 
   const handleToCart = (id, cantidad) => {
     const elementToAdd = allProducts.find((element) =>
       element.id.toString().includes(id)
     );
-    if (elementToAdd) {
-      dispatch(addCartItem({ ...elementToAdd, cantidad: parseInt(cantidad) }));
-      dispatch(setPulseCart(true));
-      setTimeout(() => {
-        dispatch(setPulseCart(false));
-      }, 500);
-    }
   };
 
   const Item = styled(Paper)(({ theme }) => ({

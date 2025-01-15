@@ -9,16 +9,9 @@ import { Header } from "./Header";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setIsLoading } from "../redux/slices/loaderSlice";
-import UpdateExchangeRatesModal from "./UpdateExchangeRatesModal";
 import axios from "axios";
 import { fetchUserData } from "../redux/actions/fetchUserData";
 import Loader from "./tools/Loader";
-import socket from "../../socket";
-import { ProductTable } from "./ProductTable";
-import { ProductModal } from "./ProductModal";
-import { ConfirmDelete } from "./ConfirmDelete";
-import { useProducts } from "../hooks/useProducts";
-import ProductCRUD from "./ProductCRUD";
 import Modal from "./tools/Modal";
 
 export const UserProfile = () => {
@@ -48,27 +41,10 @@ export const UserProfile = () => {
     }
   };
 
-  useEffect(() => {
-    if (user) {
-      if (user.u_nivel === 2) {
-        socket.emit("registerUser", user.id);
-        socket.on("newNotification", (data) => {
-          alert(`Nueva notificación:\n${data.message}`);
-        });
-      }
-    }
-    return () => {
-      socket.off("newNotification");
-    };
-  }, []);
-
-  const { products, createProduct, updateProduct, deleteProduct } =
-    useProducts();
+  // const { products, createProduct, updateProduct, deleteProduct } =
+  //   useProducts();
 
   const [isModalOpenProducts, setIsModalOpenProducts] = useState(false);
-  const [isModalOpenAddProducts, setIsModalOpenAddProducts] = useState(false);
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
 
   // const handleShowProductsTable = () => {
   //   setSelectedProduct(null);
@@ -93,16 +69,16 @@ export const UserProfile = () => {
   };
 
   const confirmDelete = async () => {
-    await deleteProduct(selectedProduct.id);
-    setIsDeleteOpen(false);
+    // await deleteProduct(selectedProduct.id);
+    // setIsDeleteOpen(false);
   };
 
   const saveProduct = async (product) => {
-    if (selectedProduct) {
-      await updateProduct(product);
-    } else {
-      await createProduct(product);
-    }
+    // if (selectedProduct) {
+    //   await updateProduct(product);
+    // } else {
+    //   await createProduct(product);
+    // }
   };
 
   // useEffect(() => {
@@ -147,12 +123,6 @@ export const UserProfile = () => {
       <Header />
       <Loader />
       <div className="global_profile">
-        <UpdateExchangeRatesModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onSave={handleSave}
-          user={user}
-        />
         <div className="up_profile">
           <div className="upCards cards_up_left">
             <div className="card" onClick={() => setIsModalOpen(true)}>
@@ -276,30 +246,8 @@ export const UserProfile = () => {
         </div>
       </div>
       <button onClick={handleCreate}>Agregar Producto</button>
-      {/* <ProductTable
-        products={products}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        isOpen={isModalOpenProducts}
-        onClose={() => setIsModalOpenProducts(false)}
-      />
-      <ProductModal
-        isOpen={isModalOpenAddProducts}
-        onClose={() => setIsModalOpenAddProducts(false)}
-        onSave={saveProduct}
-        initialData={selectedProduct}
-      />
-      <ConfirmDelete
-        isOpen={isDeleteOpen}
-        onClose={() => setIsDeleteOpen(false)}
-        onConfirm={confirmDelete}
-      /> */}
       {/* Modal para productos */}
-      {isModalOpenProducts && (
-        <Modal onClose={closeProductsModal}>
-          <ProductCRUD closeModal={closeProductsModal} />
-        </Modal>
-      )}
+      {isModalOpenProducts && <Modal onClose={closeProductsModal}></Modal>}
     </>
   );
 };

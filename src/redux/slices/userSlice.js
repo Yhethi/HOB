@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   addUser: { name: "", username: "", email: "" },
   loginUser: {
-    isLogged: JSON.parse(localStorage.getItem("isLogged")) || false,
+    isLogged: false,
   },
 };
 
@@ -17,13 +17,8 @@ export const userSlice = createSlice({
       state.addUser.username = username;
       state.addUser.email = email;
     },
-    // loginUser: (state, action) => {
-    //   state.loginUser.isLogged = action.payload;
-    //   localStorage.setItem("isLogged", JSON.stringify(action.payload)); // Guarda el estado en localStorage
-    // },
     logoutUser: (state) => {
       state.loginUser.isLogged = false;
-      localStorage.removeItem("isLogged"); // Elimina el estado de localStorage al cerrar sesión
     },
   },
 });

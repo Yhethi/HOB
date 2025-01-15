@@ -10,7 +10,7 @@ export const userLogin = async (req, res) => {
   try {
     const connection = await createConnection();
     const [results] = await connection.execute(
-      "SELECT * FROM usuarios WHERE email = ?",
+      "SELECT * FROM user WHERE email = ?",
       [email]
     );
 
@@ -29,18 +29,6 @@ export const userLogin = async (req, res) => {
         .json({ success: false, error: "Usuario o contraseña incorrectos" });
     }
 
-    const [resultsSettings] = await connection.execute(
-      "SELECT * FROM user_settings WHERE user_id = ?",
-      [user.id]
-    );
-    const userSettings = resultsSettings[0];
-
-    const [resultsCustomRate] = await connection.execute(
-      "SELECT usd,usd_to_bolivares,usd_to_pesos FROM exchangerates WHERE user_id = ?",
-      [user.id]
-    );
-
-    const customRates = resultsCustomRate[0] || null;
 
     // Generar el token con los datos del usuario
     const token = jwt.sign(
@@ -48,9 +36,7 @@ export const userLogin = async (req, res) => {
         id: user.id,
         email: user.email,
         nombre: user.nombre,
-        u_nivel: user.u_nivel,
-        userSettings,
-        customRates,
+        u_nivel: user.u_nivel
       },
       SECRET_KEY,
       { expiresIn: "1h" }
@@ -63,9 +49,7 @@ export const userLogin = async (req, res) => {
         id: user.id,
         email: user.email,
         nombre: user.nombre,
-        u_nivel: user.u_nivel,
-        userSettings,
-        customRates,
+        u_nivel: user.u_nivel
       },
     });
 
@@ -77,7 +61,8 @@ export const userLogin = async (req, res) => {
 };
 
 export const userRegister = async (req, res) => {
-  const { name, lastName, email, password } = req.body;
+  const { name, lastName, phone, email, username, password, company_id } =
+    req.body;
 
   try {
     const connection = await createConnection();
@@ -97,38 +82,23 @@ export const userRegister = async (req, res) => {
 
     // Insertar en la tabla usuarios
     const queryUsuario = `
-      INSERT INTO usuarios (nombre, email, password, created_at)
-      VALUES (?, ?, ?, NOW())
+      INSERT INTO usuarios (nombre, phone, email, username, password, company_id, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, NOW())
     `;
     const fullName = name + " " + lastName;
 
     // Insertar el usuario en la tabla
     const [result] = await connection.execute(queryUsuario, [
       fullName,
+      phone,
       email,
+      username,
       hashedPassword,
+      company_id,
     ]);
 
     // Obtener el ID del último usuario registrado
     const userId = result.insertId;
-
-    // Insertar valores predeterminados en la tabla exchangerates
-    const queryExchangeRates = `
-      INSERT INTO exchangerates (user_id,updated_at)
-      VALUES (?, NOW())
-    `;
-    await connection.execute(queryExchangeRates, [userId]);
-
-    // Insertar valores predeterminados en la tabla user_settings
-    const queryUserSettings = `
-      INSERT INTO user_settings (user_id)
-      VALUES (?)
-    `;
-    await connection.execute(queryUserSettings, [userId]);
-
-    console.log(
-      "Usuario y configuraciones iniciales registrados en la base de datos."
-    );
 
     // Cerrar la conexión
     await connection.end();
@@ -169,18 +139,6 @@ export const userData = async (req, res) => {
         .json({ success: false, message: "Usuario no encontrado." });
     }
 
-    const [customRatesRows] = await connection.execute(
-      `SELECT usd_to_bolivares, usd_to_pesos, usd FROM exchangerates WHERE user_id = ?`,
-      [userId]
-    );
-
-    const [resultsSettings] = await connection.execute(
-      "SELECT * FROM user_settings WHERE user_id = ?",
-      [userId]
-    );
-
-    const userSettings = resultsSettings[0];
-    const customRates = customRatesRows[0] || {};
     const user = userRows[0];
 
     await connection.end();
@@ -191,8 +149,6 @@ export const userData = async (req, res) => {
         email: user.email,
         nombre: user.nombre,
         u_nivel: user.u_nivel,
-        customRates,
-        userSettings,
       },
       SECRET_KEY,
       { expiresIn: "1h" }
@@ -203,8 +159,6 @@ export const userData = async (req, res) => {
       token: newToken,
       user: {
         ...user,
-        customRates,
-        userSettings,
       },
     });
   } catch (error) {
